@@ -2,7 +2,7 @@
 
 ## Status
 
-In Progress — Phase -1 Engineering Preparation.
+Completed — merged to `develop` in [PR #1](https://github.com/thg1rb/lamun/pull/1) (`4e7d60f`, 2026-10-01). Phase 0 has not started.
 
 ## Context
 
@@ -80,7 +80,7 @@ Lamun has a complete product and engineering specification and an approved devel
 - [x] Built-in Skills are inspected; discovery, candidate evaluation, any installation, and verification are documented.
 - [x] PR template and branch protection plan are present.
 - [x] Review-only Sub-agent reports findings; main Agent resolves required findings and reruns checks.
-- [ ] W001 is merged to `develop` only after Definition of Done, with status updated honestly.
+- [x] W001 is merged to `develop` only after Definition of Done, with status updated honestly.
 
 ## Test Plan
 
@@ -103,7 +103,7 @@ Planning sections were completed before substantial bootstrap implementation.
 
 ## Result
 
-Local baseline is built and checked. [PR #1](https://github.com/thg1rb/lamun/pull/1) is open to `develop`; its initial and post-review GitHub Actions quality runs passed. The review-only Sub-agent found no remaining blocker. Branch protection is active on `develop` and `main`. Final documentation CI and merge remain.
+The baseline was built, checked, and merged to `develop` in [PR #1](https://github.com/thg1rb/lamun/pull/1), squash commit `4e7d60f`. Its initial, post-review, and final documentation GitHub Actions quality runs passed. The review-only Sub-agent found no remaining blocker. Branch protection is active on `develop` and `main`. This status handoff records completion after the merge.
 
 Local validation on macOS 27.0 / Xcode 27.0:
 
@@ -114,6 +114,7 @@ Local validation on macOS 27.0 / Xcode 27.0:
 - `actionlint` v1.7.12: passed for `.github/workflows/ci.yml`.
 - Initial PR CI quality run `36835523478`: passed (documentation, format, lint, security, dependencies, build, unit tests, static analysis).
 - Post-review PR CI quality run `36835936365`: passed, including the new first-party whitespace gate.
+- Final PR CI quality run `36836173014`: passed after the review-result documentation update.
 - Review-only Sub-agent follow-up on commit `4f785fa`: license and status findings resolved; vendor whitespace exception documented and accepted; no new actionable findings. The reviewer made no file changes.
 - GitHub branch protection verified on `develop` and `main`: pull requests, strict required checks (`quality`; also `release-configuration` on `main`), administrator enforcement, linear history, conversation resolution, and force-push/deletion blocks.
 - UI target compiled; UI test runner exited before establishing a connection. This local Xcode also reports a CoreDevice/CoreSimulator version mismatch. Root cause is unproven; the UI smoke result remains open and is not reported as passed.
@@ -127,6 +128,6 @@ The review-only Sub-agent found copied Skills lacked retained upstream license n
 
 ## Follow-up Work
 
-- Final documentation CI and W001 merge remain. After merge, update the project status to record W001 complete.
+- W002 — Audio Process Discovery is the next planned work item and must start in a separate execution cycle after reviewing the repository state and documentation.
 - Resolve the local Xcode CoreDevice/CoreSimulator mismatch or run UI smoke validation on a healthy Mac. Do not mistake this environment failure for a passing UI test.
 - W002 — Audio Process Discovery, after W001 meets its exit criteria. Do not begin it in this work cycle.
