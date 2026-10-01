@@ -6,7 +6,7 @@ Phase 0 — Technical Feasibility.
 
 ## Current Work
 
-W003 — Independent Per-Application Gain Feasibility (`docs/work/003-per-app-gain-feasibility.md`). Status: In Progress on `feature/per-app-gain-poc`; local POC, automated checks, and dedicated read-only review are complete. Draft [PR #5](https://github.com/thg1rb/lamun/pull/5) targets `develop`; CI, merge, and several hardware/distribution gates remain outstanding.
+W003 — Independent Per-Application Gain Feasibility (`docs/work/003-per-app-gain-feasibility.md`). Status: In Progress on `feature/per-app-gain-poc`; local POC, automated checks, dedicated read-only review, and PR `quality` CI check are complete. Draft [PR #5](https://github.com/thg1rb/lamun/pull/5) targets `develop`; merge and several hardware/distribution gates remain outstanding. The `release-configuration` check was skipped by workflow conditions.
 
 ## Completed
 
