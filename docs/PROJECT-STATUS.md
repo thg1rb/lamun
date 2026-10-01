@@ -2,24 +2,25 @@
 
 ## Current Phase
 
-Phase -1 — Engineering Preparation.
+Phase -1 — Engineering Preparation completed. Phase 0 has not started.
 
 ## Current Work
 
-W001 — Project Bootstrap (`docs/work/001-project-bootstrap.md`). Status: In Progress.
+None active. W001 — Project Bootstrap is complete; W002 is pending a separate execution cycle.
 
 ## Completed
 
 - Product and engineering specification reviewed.
 - Approved development plan recorded in `docs/PLAN.md`.
+- W001 — Project Bootstrap merged to `develop` in [PR #1](https://github.com/thg1rb/lamun/pull/1) (`4e7d60f`). Its documentation, native shell, tests, project-local Skills, CI, and branch protection baseline are in place.
 
 ## In Progress
 
-- Engineering documentation, native project, quality tooling, and Skills evaluation are implemented on `feature/project-bootstrap`. [PR #1](https://github.com/thg1rb/lamun/pull/1) is open to `develop`. CI passed after review fixes; the review-only Sub-agent found no remaining blocker. Branch protection is active. Documentation handoff and final merge remain.
+None recorded.
 
 ## Next
 
-- Finalize the W001 documentation handoff, rerun PR CI, and merge to `develop`.
+- W002 — Audio Process Discovery (Phase 0), only after a fresh session reviews `docs/PROMPT.md`, `docs/PLAN.md`, this status, and the W001 result. W002 has not started.
 
 ## Blocked
 
@@ -37,8 +38,8 @@ None recorded.
 
 ## Git State
 
-At W001 start, `main` has no commits. A one-time seed commit is required before `develop` and `feature/project-bootstrap` can exist.
+`main` contains the one-time specification/plan seed commit. `develop` contains the merged W001 baseline (`4e7d60f`). Both remote branches are protected. The W001 feature branch was deleted after squash merge.
 
 ## Active Work Document
 
-`docs/work/001-project-bootstrap.md`
+No active work document. The completed W001 record is `docs/work/001-project-bootstrap.md`.
