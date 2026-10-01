@@ -1,4 +1,4 @@
-#if DEBUG
+#if DEBUG || W003_VALIDATION
   import AudioToolbox
   import Combine
   import CoreAudio

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Lamun W003 Test Tone</title>
+<body>
+  <h1>Lamun W003 browser tone</h1>
+  <p id="frequency"></p>
+  <button id="start">Start quiet tone</button>
+  <button id="stop" disabled>Stop tone</button>
+  <script>
+    const requested = Number(new URLSearchParams(location.search).get("hz"));
+    const frequency = requested === 880 ? 880 : 660;
+    document.querySelector("#frequency").textContent = `${frequency} Hz`;
+    let context;
+    let oscillator;
+    document.querySelector("#start").onclick = async () => {
+      context = new AudioContext();
+      oscillator = context.createOscillator();
+      const level = context.createGain();
+      oscillator.frequency.value = frequency;
+      oscillator.connect(level);
+      level.gain.value = 0.05;
+      level.connect(context.destination);
+      oscillator.start();
+      await context.resume();
+      document.querySelector("#start").disabled = true;
+      document.querySelector("#stop").disabled = false;
+    };
+    document.querySelector("#stop").onclick = async () => {
+      oscillator.stop();
+      await context.close();
+      document.querySelector("#start").disabled = false;
+      document.querySelector("#stop").disabled = true;
+    };
+  </script>
+</body>
+</html>

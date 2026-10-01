@@ -38,6 +38,8 @@ jobs:
         run: python3 scripts/check-dependencies.py
       - name: Build
         run: xcodebuild -quiet -project Lamun.xcodeproj -scheme Lamun -configuration Debug -destination 'platform=macOS' -derivedDataPath "$RUNNER_TEMP/LamunDerived" CODE_SIGNING_ALLOWED=NO build
+      - name: W003 Release validation build (unsigned)
+        run: xcodebuild -quiet -project Lamun.xcodeproj -scheme LamunW003Validation -configuration W003Validation -destination 'platform=macOS' -derivedDataPath "$RUNNER_TEMP/LamunW003Validation" CODE_SIGNING_ALLOWED=NO build
       - name: Unit tests
         run: xcodebuild -quiet -project Lamun.xcodeproj -scheme Lamun -configuration Debug -destination 'platform=macOS' -derivedDataPath "$RUNNER_TEMP/LamunDerived" -only-testing:LamunTests CODE_SIGNING_ALLOWED=NO test
       - name: Static analysis

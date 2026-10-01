@@ -6,7 +6,7 @@ Phase 0 — Technical Feasibility.
 
 ## Current Work
 
-W003 — Independent Per-Application Gain Feasibility (`docs/work/003-per-app-gain-feasibility.md`). Status: In Progress on `feature/per-app-gain-poc`; local POC, automated checks, dedicated read-only review, and PR `quality` CI check are complete. Draft [PR #5](https://github.com/thg1rb/lamun/pull/5) targets `develop`; merge and several hardware/distribution gates remain outstanding. The `release-configuration` check was skipped by workflow conditions.
+W003 — Independent Per-Application Gain Feasibility (`docs/work/003-per-app-gain-feasibility.md`). Status: In Progress on `feature/per-app-gain-poc`. Draft [PR #5](https://github.com/thg1rb/lamun/pull/5) targets `develop` and remains unmerged. Earlier POC checks and read-only review covered the prior commit; continuation changes require fresh validation, CI, and review. Physical-output tone measurements now support independent attenuation and recovery, but the listener, device-switch, permission, lifecycle, latency/endurance, and Developer ID distribution gates remain open. The `release-configuration` check was skipped by workflow conditions on this `develop` PR; a separate unsigned W003 Release-validation build was added locally.
 
 ## Completed
 
@@ -21,7 +21,8 @@ W003 — Independent Per-Application Gain Feasibility (`docs/work/003-per-app-ga
 - W002 observed an ad-hoc signed Debug build with the App Sandbox entitlement enumerating process metadata without a permission prompt. This does not validate audio capture or distribution behavior.
 - W003's DEBUG-only Core Audio process-tap POC independently scaled IINA and Chrome helper streams at measured RMS ratios 0.249 and 0.499 for requested gains 0.25 and 0.50. Safari remained a third active output client and system output scalar remained 0.25. See [ADR-002](./decisions/ADR-002-per-app-gain-architecture.md) for provisional Outcome B and its limits.
 - W003 local validation: Debug build, Release build, `LamunTests`, Xcode static analysis, format, lint, docs, whitespace, security baseline, and dependency baseline passed. Xcode emits the existing CoreDevice/CoreSimulator mismatch warnings; the UI test runner issue remains unresolved and is not treated as passed.
-- W003 remaining unvalidated: acoustic listening/loopback and duplicate-leakage assessment, active physical output switching (no second physical device available), permission denial/recovery, five-minute resource/energy sampling, abnormal termination recovery, non-Float32/channel layouts, and Developer ID signed/notarized distribution (no valid identity installed). Mac App Store status remains unknown.
+- W003 continuation physical-output run: with three concurrent tones, four transient microphone samples per state measured IINA at about −55 dBFS at unity, −60 to −62 dBFS at 50%, and near the microphone noise floor at 0%. Chrome independently moved from about −44 dBFS at unity to −50 dBFS at 50% and near the noise floor at 0%, while IINA stayed muted. Each native tone returned after its tap stopped. Safari stayed audible but drifted about 2–3 dB over the run. These observations support the gain path, but do not replace listening, prove sub-noise-floor suppression, or measure latency. Details are in the W003 work document.
+- W003 remaining unvalidated: human acoustic listening/quality and duplicate-leakage assessment, active physical output switching (second stereo device not yet connected), permission denial/recovery, extended resource/energy sampling, abnormal termination recovery, non-Float32/channel layouts, and Developer ID signed/notarized distribution (no valid local identity or signing-host connection yet). The optimized build launched and callbacks ran, but a later retry showed zero RMS for clients marked output-active; its live audio path is not validated. The fresh bundle's AudioCapture reset succeeded, but no alert appeared and the OS permission switch was on; changing it to denied requires local Touch ID/password and is pending. Mac App Store status remains unknown. The GitHub CLI is currently unauthenticated, so the PR description has not been updated with continuation evidence.
 
 ## Next
 
@@ -29,7 +30,7 @@ W003 — Independent Per-Application Gain Feasibility (`docs/work/003-per-app-ga
 
 ## Blocked
 
-None recorded.
+W003 feasibility closeout is blocked on a listener confirmation, a second stereo output device, and access to a representative Mac with Developer ID signing/notarization capability. Keep PR #5 draft and unmerged while those and the remaining ordered gates are unresolved.
 
 ## Known Risks
 

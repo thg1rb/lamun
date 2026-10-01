@@ -1,4 +1,4 @@
-#if DEBUG
+#if DEBUG || W003_VALIDATION
   import AppKit
   import CoreAudio
   import SwiftUI
@@ -13,7 +13,7 @@
       ScrollView {
         VStack(alignment: .leading, spacing: 8) {
           Text("Refresh \(metricsRefreshTick)").hidden().frame(height: 0)
-          Text("Audio Process Discovery · Debug")
+          Text("Audio Process Discovery · W003 validation")
             .font(.headline)
 
           Button("Stop all sessions and quit Lamun") {
@@ -22,7 +22,7 @@
           }
 
           Text(
-            "DEBUG feasibility only: selecting Start temporarily captures this app's audio, applies gain, and re-renders it locally. No audio is saved or uploaded."
+            "W003 feasibility only: selecting Start temporarily captures this app's audio, applies gain, and re-renders it locally. No audio is saved or uploaded."
           )
           .font(.caption)
           .foregroundStyle(.secondary)
@@ -52,6 +52,13 @@
 
           Text("Property listener events: \(discovery.listenerEventCount)")
             .font(.caption.monospacedDigit())
+
+          Button("Refresh audio clients") {
+            discovery.refreshNow()
+          }
+          Button("Refresh measurements") {
+            metricsRefreshTick &+= 1
+          }
 
           Text(
             "Process-list listener: \(discovery.isProcessListListenerRegistered ? "registered" : "unavailable")"
@@ -148,12 +155,6 @@
       .onAppear { discovery.start() }
       .onReceive(discovery.$snapshots) { snapshots in
         gainPoC.reconcile(with: snapshots)
-      }
-      .task {
-        while !Task.isCancelled {
-          try? await Task.sleep(for: .milliseconds(500))
-          metricsRefreshTick &+= 1
-        }
       }
       .onReceive(NotificationCenter.default.publisher(for: .lamunStopExperimentalAudio)) { _ in
         gainPoC.stopAll()
