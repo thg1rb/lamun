@@ -16,7 +16,7 @@ W003 — Independent Per-Application Gain Feasibility (`docs/work/003-per-app-ga
 
 ## In Progress
 
-- W003 combines the former W003 process-capture/permission item and former W004 independent-gain item. The scope revision and dependencies are recorded in `docs/PLAN.md`; W003 has not yet produced an architecture conclusion.
+- W003 combines the former W003 process-capture/permission item and former W004 independent-gain item. The scope revision and dependencies are recorded in `docs/PLAN.md`; ADR-002 records provisional Outcome B for continued Phase 0 validation, not production approval.
 - W002 — Audio Process Discovery completed and merged in [PR #3](https://github.com/thg1rb/lamun/pull/3) at `47f35e2`. Public Core Audio discovery was observed with IINA, Safari, and Chrome Guest. Chrome audio appeared as a helper process; output-I/O state is not exact playback/pause state.
 - W002 observed an ad-hoc signed Debug build with the App Sandbox entitlement enumerating process metadata without a permission prompt. This does not validate audio capture or distribution behavior.
 - W003's DEBUG-only Core Audio process-tap POC independently scaled IINA and Chrome helper streams at measured RMS ratios 0.249 and 0.499 for requested gains 0.25 and 0.50. Safari remained a third active output client and system output scalar remained 0.25. See [ADR-002](./decisions/ADR-002-per-app-gain-architecture.md) for provisional Outcome B and its limits.

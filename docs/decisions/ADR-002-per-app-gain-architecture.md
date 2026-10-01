@@ -45,6 +45,8 @@ This decision does not establish production support, minimum macOS version, a st
 
 - Independent signal-level gain is proven for two processes on the built-in 48 kHz, two-channel output. No analog/acoustic listening or loopback test was performed, so audible artifacts, duplicate leakage, and perceived quality remain unvalidated.
 - The callback assumes Float32 buffers; other formats/channel topologies require explicit validation and conversion before production.
+- After read-only review, the DEBUG POC queries the tap input and aggregate output `AudioStreamBasicDescription` and rejects formats other than linear PCM Float32 before starting audio I/O. This prevents the current float-reinterpretation callback from accepting a reported non-Float32 format; format-change behavior after start remains unvalidated.
+- Cleanup now retains failed session/resource handles for retry and removes the session from the controller only after teardown succeeds. Error-injection testing is still outstanding.
 - No second physical output was available; active device switching is untested. A Teams virtual device was enumerated but not used for an active switch.
 - Permission grant was observed; denial/recovery/revocation was not tested. The purpose string is present in the built Debug bundle after correcting generated Info.plist behavior.
 - Developer ID credentials were unavailable (`0 valid identities found`); signed/notarized direct distribution is assessed but not experimentally validated. Mac App Store compatibility is unknown pending review and signed testing.
@@ -56,6 +58,7 @@ This decision does not establish production support, minimum macOS version, a st
 
 - [Apple: Capturing system audio with Core Audio taps](https://developer.apple.com/documentation/coreaudio/capturing-system-audio-with-core-audio-taps)
 - [Apple: `AudioHardwareProcess`](https://developer.apple.com/documentation/coreaudio/audiohardwareprocess)
+- [Apple: `AudioHardwareTap.format`](https://developer.apple.com/documentation/coreaudio/audiohardwaretap/format)
 - [Apple: `CATapMuteBehavior`](https://developer.apple.com/documentation/coreaudio/catapmutebehavior)
 - [Apple: audio-input entitlement](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.device.audio-input)
 - [Apple: notarizing macOS software](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution)

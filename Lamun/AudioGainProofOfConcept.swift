@@ -49,10 +49,11 @@
     }
 
     func stop(processObjectID: AudioObjectID) {
-      guard let session = sessionResources.removeValue(forKey: processObjectID) else { return }
-      activeSessions.removeValue(forKey: processObjectID)
+      guard let session = sessionResources[processObjectID] else { return }
       do {
         try session.stop()
+        sessionResources.removeValue(forKey: processObjectID)
+        activeSessions.removeValue(forKey: processObjectID)
         lastError = nil
       } catch {
         lastError = error.localizedDescription
@@ -91,11 +92,11 @@
     let outputDeviceName: String
     let muteBehaviorName: String
     let metrics: AudioGainMetricCollector
-    private let tapID: AudioObjectID
-    private let aggregateDeviceID: AudioObjectID
-    private let ioProcID: AudioDeviceIOProcID
+    private var tapID: AudioObjectID?
+    private var aggregateDeviceID: AudioObjectID?
+    private var ioProcID: AudioDeviceIOProcID?
     private let gainControl: AudioGainControl
-    private var stopped = false
+    private var ioProcIsRunning = false
     private(set) var gain = 1.0
 
     private init(
@@ -110,6 +111,7 @@
       self.tapID = tapID
       self.aggregateDeviceID = aggregateDeviceID
       self.ioProcID = ioProcID
+      self.ioProcIsRunning = true
       self.gainControl = gainControl
       self.metrics = metrics
       self.outputDeviceName = outputDeviceName
@@ -156,6 +158,22 @@
             "Create tap/output aggregate device", status: aggregateStatus)
         }
 
+        let tapFormat = try audioStreamFormat(
+          objectID: tapID,
+          selector: kAudioTapPropertyFormat,
+          scope: kAudioObjectPropertyScopeGlobal,
+          label: "Read process tap stream format"
+        )
+        try requireFloat32(tapFormat, label: "Process tap")
+
+        let outputFormat = try audioStreamFormat(
+          objectID: aggregateID,
+          selector: kAudioDevicePropertyStreamFormat,
+          scope: kAudioDevicePropertyScopeOutput,
+          label: "Read aggregate output stream format"
+        )
+        try requireFloat32(outputFormat, label: "Aggregate output")
+
         let metrics = AudioGainMetricCollector()
         let gainControl = AudioGainControl()
         let ioBlock = makeAudioGainIOBlock(metrics: metrics, gainControl: gainControl)
@@ -200,26 +218,45 @@
     }
 
     func stop() throws {
-      guard !stopped else { return }
-      stopped = true
-      let stopStatus = AudioDeviceStop(aggregateDeviceID, ioProcID)
-      let procStatus = AudioDeviceDestroyIOProcID(aggregateDeviceID, ioProcID)
-      let aggregateStatus = AudioHardwareDestroyAggregateDevice(aggregateDeviceID)
-      let tapStatus = AudioHardwareDestroyProcessTap(tapID)
-      guard stopStatus == noErr else {
-        throw AudioGainProofOfConceptError.coreAudio(
-          "Stop aggregate I/O callback", status: stopStatus)
+      var failures: [AudioGainProofOfConceptError] = []
+      if let aggregateDeviceID {
+        if let ioProcID {
+          if ioProcIsRunning {
+            let status = AudioDeviceStop(aggregateDeviceID, ioProcID)
+            if status == noErr {
+              ioProcIsRunning = false
+            } else {
+              failures.append(.coreAudio("Stop aggregate I/O callback", status: status))
+            }
+          }
+          if !ioProcIsRunning {
+            let status = AudioDeviceDestroyIOProcID(aggregateDeviceID, ioProcID)
+            if status == noErr {
+              self.ioProcID = nil
+            } else {
+              failures.append(.coreAudio("Destroy aggregate I/O callback", status: status))
+            }
+          }
+        }
+        if ioProcID == nil {
+          let status = AudioHardwareDestroyAggregateDevice(aggregateDeviceID)
+          if status == noErr {
+            self.aggregateDeviceID = nil
+          } else {
+            failures.append(.coreAudio("Destroy aggregate device", status: status))
+          }
+        }
       }
-      guard procStatus == noErr else {
-        throw AudioGainProofOfConceptError.coreAudio(
-          "Destroy aggregate I/O callback", status: procStatus)
+      if aggregateDeviceID == nil, let tapID {
+        let status = AudioHardwareDestroyProcessTap(tapID)
+        if status == noErr {
+          self.tapID = nil
+        } else {
+          failures.append(.coreAudio("Destroy process tap", status: status))
+        }
       }
-      guard aggregateStatus == noErr else {
-        throw AudioGainProofOfConceptError.coreAudio(
-          "Destroy aggregate device", status: aggregateStatus)
-      }
-      guard tapStatus == noErr else {
-        throw AudioGainProofOfConceptError.coreAudio("Destroy process tap", status: tapStatus)
+      if !failures.isEmpty {
+        throw AudioGainProofOfConceptError.cleanup(failures.map(\.localizedDescription))
       }
     }
 
@@ -238,6 +275,43 @@
         throw AudioGainProofOfConceptError.coreAudio("Read process tap UID", status: status)
       }
       return uid as String
+    }
+
+    private static func audioStreamFormat(
+      objectID: AudioObjectID,
+      selector: AudioObjectPropertySelector,
+      scope: AudioObjectPropertyScope,
+      label: String
+    ) throws -> AudioStreamBasicDescription {
+      var address = AudioObjectPropertyAddress(
+        mSelector: selector,
+        mScope: scope,
+        mElement: kAudioObjectPropertyElementMain
+      )
+      var size = UInt32(MemoryLayout<AudioStreamBasicDescription>.size)
+      var format = AudioStreamBasicDescription()
+      let status = withUnsafeMutablePointer(to: &format) { pointer in
+        AudioObjectGetPropertyData(objectID, &address, 0, nil, &size, pointer)
+      }
+      guard status == noErr else {
+        throw AudioGainProofOfConceptError.coreAudio(label, status: status)
+      }
+      return format
+    }
+
+    private static func requireFloat32(
+      _ format: AudioStreamBasicDescription,
+      label: String
+    ) throws {
+      let isLinearPCM = format.mFormatID == kAudioFormatLinearPCM
+      let isFloat32 =
+        format.mBitsPerChannel == 32
+        && format.mFormatFlags & kAudioFormatFlagIsFloat != 0
+      guard isLinearPCM && isFloat32 else {
+        throw AudioGainProofOfConceptError.unsupportedFormat(
+          "\(label) must be linear PCM Float32; received formatID \(format.mFormatID), flags 0x\(String(format.mFormatFlags, radix: 16)), bits/channel \(format.mBitsPerChannel)."
+        )
+      }
     }
 
     private static func defaultOutputDevice() throws -> (
@@ -467,11 +541,17 @@
 
   private enum AudioGainProofOfConceptError: LocalizedError {
     case coreAudio(String, status: OSStatus)
+    case cleanup([String])
+    case unsupportedFormat(String)
 
     var errorDescription: String? {
       switch self {
       case .coreAudio(let operation, let status):
         "\(operation) failed (Core Audio status \(status), 0x\(String(UInt32(bitPattern: status), radix: 16)))."
+      case .cleanup(let failures):
+        "Audio cleanup needs retry: \(failures.joined(separator: "; "))"
+      case .unsupportedFormat(let message):
+        message
       }
     }
   }
