@@ -2,7 +2,7 @@
 
 ## Status
 
-In Progress — Phase 0. Local POC, documentation updates, and automated validation are complete; read-only review, CI, PR integration, and the remaining device/distribution limitations are outstanding. Scope consolidates the former W003 process-capture/permission POC and former W004 independent-gain/routing POC. See the dated revision note in `docs/PLAN.md`.
+In Progress — Phase 0. Local POC, documentation updates, automated validation, and dedicated read-only review are complete. Draft PR [#5](https://github.com/thg1rb/lamun/pull/5) targets `develop`; CI and PR integration, plus the remaining device/distribution limitations, are outstanding. Scope consolidates the former W003 process-capture/permission POC and former W004 independent-gain/routing POC. See the dated revision note in `docs/PLAN.md`.
 
 ## Context
 
@@ -230,11 +230,12 @@ Planning and this work document preceded substantive source changes. Branch: `fe
 - **Passed:** `scripts/check-format.sh`, `scripts/check-lint.sh`, `scripts/check-docs.py`, `scripts/check-whitespace.py`, `scripts/check-security.py`, and `scripts/check-dependencies.py`.
 - **Observed warning:** All local Xcode invocations continue to emit the known CoreDevice/CoreSimulator mismatch. The Lamun unit target still ran successfully. The W001 UI test runner issue remains unresolved and is not marked passed.
 - **Not run:** XCTest UI target because its known runner-bootstrap failure is unrelated and persists. The diagnostic window itself was manually operated during the audio POC.
-- **Pending:** Independent read-only code review, GitHub CI, and PR integration. No merge has occurred.
+- **Confirmed:** Dedicated read-only review completed three passes; the final pass of commit `7ce485a` found no remaining findings. Review did not validate acoustic output or hardware/distribution gates.
+- **Pending:** GitHub CI and PR integration. Draft PR #5 targets `develop`; no merge has occurred.
 
 ## Result
 
-Outcome B is provisionally justified for continued Phase 0 work. The W003 work item is not complete: acoustic output quality, physical device switching, permission denial/recovery, endurance/resource comparisons, abnormal cleanup, and Developer ID signed/notarized validation remain open. Automated checks and independent review/CI/merge are pending.
+Outcome B is provisionally justified for continued Phase 0 work. The W003 work item is not complete: acoustic output quality, physical device switching, permission denial/recovery, endurance/resource comparisons, abnormal cleanup, and Developer ID signed/notarized validation remain open. Local automated checks and independent review passed; GitHub CI and merge are pending.
 
 ## Architecture Decision
 
