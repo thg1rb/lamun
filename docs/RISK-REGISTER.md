@@ -6,7 +6,7 @@ Likelihoods are preliminary until experiments provide evidence. Update this regi
 |---|---|---|---|---|---|---|
 | R01 | Public APIs cannot provide independent application gain | Critical | Reduced on tested host | Two-app process-tap/aggregate/HAL callback POC worked; validate supported devices, formats, lifecycle, distribution before Phase 1 | 0 | Reduced, not resolved |
 | R02 | Capture/re-rendering adds audible delay or gaps | High | Unknown | Callback graph delta was 23.90 ms; this is not acoustic end-to-end latency. Perform loopback/listening and device-switch/endurance measurements | 0–1 | Open |
-| R03 | Permissions, sandbox, or distribution block chosen topology | High | High | Debug sandbox capture worked after grant; permission denial/recovery and Developer ID signed/notarized validation remain open; separate App Store review | 0 | Open |
+| R03 | Permissions, sandbox, or distribution block chosen topology | High | High | Denied tap setup produced callbacks with zero RMS and no error; after user regrant, fresh app launch captured/scaled an active tone. In-process recovery and a reliable permission-state signal remain unknown; Developer ID signed/notarized validation and separate App Store review remain open | 0 | Open |
 | R04 | Device/process lifecycle leaks resources or interrupts audio | High | Medium | Lifecycle matrix and cleanup tests | 0–1 | Open |
 | R05 | Trigger Source audio cannot be isolated for Smart Ducking | High | Unknown | Input-pipeline probe and source isolation tests | 0–2 | Open |
 | R06 | Ducking pumps or overrides manual volume | High | Medium | Local detector evaluation and state/override tests | 2 | Open |
