@@ -19,7 +19,7 @@ W002 — Audio Process Discovery (`docs/work/002-audio-process-discovery.md`). S
 - W002 documentation-first work record and DEBUG-only process-discovery prototype are implemented on `feature/audio-process-discovery`.
 - Public Core Audio metadata discovery was observed with IINA, Safari, and Chrome Guest. Chrome audio appeared as a helper process; output-I/O state is not exact playback/pause state.
 - Manual diagnostic view showed listener events and handled Chrome termination/relaunch. An ad-hoc signed Debug app with the App Sandbox entitlement enumerated process metadata without a permission prompt.
-- The Debug build, unit/integration tests, static analysis, formatting, lint, documentation, whitespace, security-pattern, and dependency checks pass. Review findings were fixed and regression-tested; CI and follow-up review are pending. The local XCTest UI runner issue remains recorded; W002 diagnostic UI was manually inspected via accessibility scripting.
+- The Debug build, unit/integration tests, static analysis, formatting, lint, documentation, whitespace, security-pattern, and dependency checks pass. Review findings were fixed and regression-tested, including injected listener-registration failure; CI and follow-up review are pending. The local XCTest UI runner issue remains recorded; W002 diagnostic UI was manually inspected via accessibility scripting.
 
 ## Next
 

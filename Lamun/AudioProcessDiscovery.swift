@@ -14,10 +14,29 @@ final class AudioProcessDiscovery: ObservableObject {
 
   private let system = AudioHardwareSystem.shared
   private let callbackQueue = DispatchQueue(label: "org.example.lamun.process-discovery")
+  private let addProcessListListener:
+    (
+      AudioHardwareSystem,
+      [AudioObjectPropertyAddress],
+      DispatchQueue
+    ) throws -> Void
   private var systemRegistration: ListenerRegistration?
   private var processRegistrations: [AudioObjectID: ListenerRegistration] = [:]
   private var recordsByID: [AudioObjectID: AudioProcessSnapshot] = [:]
   private var hasStarted = false
+
+  init(
+    addProcessListListener:
+      @escaping (
+        AudioHardwareSystem,
+        [AudioObjectPropertyAddress],
+        DispatchQueue
+      ) throws -> Void = { system, properties, queue in
+        try system.addListener(forProperties: properties, dispatchQueue: queue)
+      }
+  ) {
+    self.addProcessListListener = addProcessListListener
+  }
 
   func start() {
     guard !hasStarted else { return }
@@ -27,7 +46,7 @@ final class AudioProcessDiscovery: ObservableObject {
     add(observer, to: system)
     let properties = [PropertyAddress(kAudioHardwarePropertyProcessObjectList)]
     do {
-      try system.addListener(forProperties: properties, dispatchQueue: callbackQueue)
+      try addProcessListListener(system, properties, callbackQueue)
       systemRegistration = ListenerRegistration(
         object: system,
         observer: observer,
@@ -35,6 +54,7 @@ final class AudioProcessDiscovery: ObservableObject {
       )
       isProcessListListenerRegistered = true
     } catch {
+      remove(observer, from: system)
       addListenerWarning("Process-list listener failed: \(error.localizedDescription)")
     }
 

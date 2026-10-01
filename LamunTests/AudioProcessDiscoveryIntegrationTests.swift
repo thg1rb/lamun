@@ -49,9 +49,46 @@ struct AudioProcessDiscoveryIntegrationTests {
     }
     #expect(retainedAfterStop)
   }
+
+  @Test("Surfaces process-list listener failure and removes its observer")
+  @MainActor
+  func surfacesListenerFailureAndRemovesObserver() {
+    guard #available(macOS 15.0, *) else { return }
+
+    let system = AudioHardwareSystem.shared
+    let previousDelegates = system.delegates
+    let otherObserver = DiscoveryTestObserver()
+    let expectedDelegateIdentifiers = (previousDelegates + [otherObserver]).map {
+      ObjectIdentifier($0 as AnyObject)
+    }
+    system.delegates = previousDelegates + [otherObserver]
+    defer { system.delegates = previousDelegates }
+
+    let discovery = AudioProcessDiscovery(addProcessListListener: { _, _, _ in
+      throw DiscoveryTestError.forcedListenerFailure
+    })
+    discovery.start()
+
+    #expect(!discovery.isProcessListListenerRegistered)
+    #expect(discovery.errorMessage == nil)
+    let surfacedFailure = discovery.listenerWarnings.contains {
+      $0.hasPrefix("Process-list listener failed:")
+    }
+    #expect(surfacedFailure)
+    let currentDelegateIdentifiers = system.delegates.map {
+      ObjectIdentifier($0 as AnyObject)
+    }
+    #expect(currentDelegateIdentifiers == expectedDelegateIdentifiers)
+
+    discovery.stop()
+  }
 }
 
 @available(macOS 15.0, *)
 private final class DiscoveryTestObserver: PropertyListenerDelegate, @unchecked Sendable {
   func propertiesChanged(properties: [AudioObjectPropertyAddress]) {}
+}
+
+private enum DiscoveryTestError: Error {
+  case forcedListenerFailure
 }

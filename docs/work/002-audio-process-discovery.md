@@ -154,7 +154,7 @@ W002 reads technical process metadata only. It does not create a process tap, re
 
 ### E7 — Listener behavior and remaining limits
 
-- **Observed:** The in-app listener delivered property changes and the diagnostic view responded to browser lifecycle events. Integration tests require a registered process-list listener, exercise discovery start/stop cleanup, and verify unrelated delegates survive cleanup. This does not establish callback latency under load or multi-hour stability.
+- **Observed:** The in-app listener delivered property changes and the diagnostic view responded to browser lifecycle events. Integration tests require a registered process-list listener, exercise discovery start/stop cleanup, preserve unrelated delegates, and inject process-list listener failure to verify the warning survives enumeration while Lamun removes its failed observer. This does not establish callback latency under load or multi-hour stability.
 - **Observed:** Five-minute idle samples reported 0.0% CPU / ~30 MiB resident memory; the two-app discovery sample reported 0.0–0.8% CPU / ~30 MiB resident memory for Lamun on this host. Energy impact and other hardware/OS combinations remain unknown. The W001 XCTest UI runner still cannot bootstrap because of the CoreDevice/CoreSimulator mismatch; W002 UI behavior was manually inspected with accessibility scripting.
 
 ## Findings
@@ -170,7 +170,7 @@ Planning was completed before source implementation. The current branch is `feat
 
 ## Result
 
-Prototype and experiments are implemented. Local Debug build, unit and integration tests, static analysis, formatting, lint, documentation links, whitespace, security-pattern, and dependency checks pass after resolving both review findings: listener setup errors remain visible, and cleanup removes only Lamun-owned delegates. A sandbox-enabled ad-hoc signed Debug build also ran and enumerated process metadata. The five-minute active discovery sample and idle sample completed. CI, review, and PR merge remain pending. The separate XCTest UI target still exits before bootstrapping with signal kill under the local CoreDevice/CoreSimulator mismatch; the DEBUG Menu Bar diagnostic itself was manually inspected through accessibility scripting. No production discovery/filtering architecture is accepted yet.
+Prototype and experiments are implemented. Local Debug build, unit and integration tests, static analysis, formatting, lint, documentation links, whitespace, security-pattern, and dependency checks pass after resolving the review findings: listener setup failures remain visible after enumeration, and both success and injected-failure cleanup remove only Lamun-owned delegates. Regression tests cover these behaviors. A sandbox-enabled ad-hoc signed Debug build also ran and enumerated process metadata. The five-minute active discovery sample and idle sample completed. CI, review, and PR merge remain pending. The separate XCTest UI target still exits before bootstrapping with signal kill under the local CoreDevice/CoreSimulator mismatch; the DEBUG Menu Bar diagnostic itself was manually inspected through accessibility scripting. No production discovery/filtering architecture is accepted yet.
 
 ## Deviations From Plan
 
