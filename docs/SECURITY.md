@@ -2,7 +2,7 @@
 
 ## Current State
 
-Phase -1 has no audio capture, microphone access, network service, analytics, or production signing credentials. The bootstrap app is only a Menu Bar shell. No audio permission or entitlement behavior has been proven. See [PROJECT-STATUS.md](./PROJECT-STATUS.md).
+W002's DEBUG-only diagnostic reads Core Audio process metadata and output-I/O state. It does not create a tap, read audio samples, request microphone access, persist process history, or send data over the network. No permission prompt appeared during the metadata-only local probe. That observation is not a permission guarantee. The local app build was not confirmed to carry and exercise a signed App Sandbox entitlement, so sandbox/distribution behavior remains unproven. See [W002 findings](./work/002-audio-process-discovery.md) and [PROJECT-STATUS.md](./PROJECT-STATUS.md).
 
 ## Privacy Requirements
 
@@ -11,6 +11,7 @@ Future audio used for control or Smart Ducking must remain transient and local: 
 ## Security Baseline
 
 - Prefer documented public APIs and least privilege. Phase 0 must test actual system-audio permission prompts, entitlements, App Sandbox, and denied/revoked behavior.
+- Treat process names, bundle identifiers, and PIDs as local diagnostic metadata. Keep them in memory unless a later documented feature requires persistence; avoid logging full process inventories.
 - Keep runtime and build dependencies minimal; review source, maintainer, license, maintenance, permissions, and supply-chain risk before adding one.
 - Never commit tokens, passwords, private keys, certificates, provisioning profiles, or notarization credentials. Use protected release secrets only when needed.
 - CI uses read-only repository permissions for untrusted PR code, pinned actions, and no signing secrets. Required checks block merge.

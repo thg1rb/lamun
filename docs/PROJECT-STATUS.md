@@ -2,11 +2,11 @@
 
 ## Current Phase
 
-Phase -1 — Engineering Preparation completed. Phase 0 has not started.
+Phase 0 — Technical Feasibility.
 
 ## Current Work
 
-None active. W001 — Project Bootstrap is complete; W002 is pending a separate execution cycle.
+W002 — Audio Process Discovery (`docs/work/002-audio-process-discovery.md`). Status: In Progress.
 
 ## Completed
 
@@ -16,11 +16,14 @@ None active. W001 — Project Bootstrap is complete; W002 is pending a separate 
 
 ## In Progress
 
-None recorded.
+- W002 documentation-first work record and DEBUG-only process-discovery prototype are implemented on `feature/audio-process-discovery`.
+- Public Core Audio metadata discovery was observed with IINA, Safari, and Chrome Guest. Chrome audio appeared as a helper process; output-I/O state is not exact playback/pause state.
+- Manual diagnostic view showed listener events and handled Chrome termination/relaunch. An ad-hoc signed Debug app with the App Sandbox entitlement enumerated process metadata without a permission prompt.
+- The Debug build, unit/integration tests, static analysis, formatting, lint, documentation, whitespace, security-pattern, and dependency checks pass. Review findings were fixed and regression-tested, including injected listener-registration failure. The final review-only Sub-agent pass found no remaining findings; CI for the latest commit and PR merge are pending. The local XCTest UI runner issue remains recorded; W002 diagnostic UI was manually inspected via accessibility scripting.
 
 ## Next
 
-- W002 — Audio Process Discovery (Phase 0), only after a fresh session reviews `docs/PROMPT.md`, `docs/PLAN.md`, this status, and the W001 result. W002 has not started.
+- Complete W002 process discovery evidence, tests, review, and PR merge; W003 remains unstarted.
 
 ## Blocked
 
@@ -28,18 +31,18 @@ None recorded.
 
 ## Known Risks
 
-- Independent per-application gain, capture, permissions, sandbox, latency, and distribution remain unproven until Phase 0.
+- Independent per-application gain, process capture, exact audio activity semantics, minimum macOS, production sandbox/signing, latency, and distribution remain unproven until Phase 0.
 - No production bundle identifier or distribution channel has been selected.
-- This Mac's Xcode CoreDevice/CoreSimulator mismatch prevented the UI smoke runner from bootstrapping; visual Menu Bar inspection is pending.
+- This Mac's Xcode CoreDevice/CoreSimulator mismatch still prevents the XCTest UI runner from bootstrapping. W002's Menu Bar diagnostic was manually inspected through accessibility scripting.
 
 ## Important Recent Decisions
 
-- Product architecture remains provisional until Phase 0. No audio architecture ADR has been accepted.
+- Product architecture remains provisional until Phase 0. ADR-001 accepts only a bounded Core Audio discovery prototype direction; it is not a production topology or minimum-OS decision.
 
 ## Git State
 
-`main` contains the one-time specification/plan seed commit. `develop` contains the merged W001 baseline (`4e7d60f`). Both remote branches are protected. The W001 feature branch was deleted after squash merge.
+`main` contains the one-time specification/plan seed commit. `develop` contains the merged W001 baseline (`4e7d60f`). W002 branches from it as `feature/audio-process-discovery`. `main` and `develop` are protected.
 
 ## Active Work Document
 
-No active work document. The completed W001 record is `docs/work/001-project-bootstrap.md`.
+Active work document: `docs/work/002-audio-process-discovery.md`. W001 record: `docs/work/001-project-bootstrap.md`.

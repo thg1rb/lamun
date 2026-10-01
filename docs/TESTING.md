@@ -4,7 +4,7 @@
 
 W001 establishes a native build, unit test target, and UI test target. The initial tests validate the bootstrap application configuration and launch, not audio behavior. Local commands and CI details are in [DEVELOPMENT.md](./DEVELOPMENT.md). A passing bootstrap suite does not prove mixer feasibility.
 
-On the W001 development Mac, the unit test passed. The UI target compiled, but its runner exited before bootstrapping while local Xcode reported a CoreDevice/CoreSimulator mismatch. Menu Bar visual inspection also timed out. These are open validation limits, not passed UI results. CI requires the unit test; UI smoke validation remains manual until a healthy interactive runner is verified.
+On the W001 development Mac, the unit test passed. The UI target compiled, but its runner exited before bootstrapping while local Xcode reported a CoreDevice/CoreSimulator mismatch. Menu Bar visual inspection also timed out. These are open validation limits, not passed UI results. CI requires the unit test; UI smoke validation remains manual until a healthy interactive runner is verified. W002 manually verified Core Audio metadata enumeration with IINA playback and browser playback through Safari and Chrome Guest; it did not complete a Lamun UI smoke test or validate the in-app listener's long-run cadence/teardown. Chrome's output-I/O property remained true briefly after media was paused, so these checks must not label the property as exact playback state.
 
 ## Test Layers
 
