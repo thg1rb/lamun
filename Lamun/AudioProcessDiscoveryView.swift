@@ -118,6 +118,15 @@
                     Text("\(Int(gainPoC.gain(for: process.audioObjectID) * 100))%")
                       .font(.caption.monospacedDigit())
                       .frame(width: 34, alignment: .trailing)
+                    ForEach([1.0, 0.5, 0.0], id: \.self) { preset in
+                      Button("\(Int(preset * 100))%") {
+                        gainPoC.setGain(preset, for: process.audioObjectID)
+                        metricsRefreshTick &+= 1
+                      }
+                      .accessibilityLabel(
+                        "Set \(Int(preset * 100)) percent gain for \(process.displayName)"
+                      )
+                    }
                   }
                 }
 
