@@ -16,7 +16,10 @@ W002 — Audio Process Discovery (`docs/work/002-audio-process-discovery.md`). S
 
 ## In Progress
 
-- W002 work document created on `feature/audio-process-discovery` before source experiments.
+- W002 documentation-first work record and DEBUG-only process-discovery prototype are implemented on `feature/audio-process-discovery`.
+- Public Core Audio metadata discovery was observed with IINA, Safari, and Chrome Guest. Chrome audio appeared as a helper process; output-I/O state is not exact playback/pause state.
+- Manual diagnostic view showed listener events and handled Chrome termination/relaunch. An ad-hoc signed Debug app with the App Sandbox entitlement enumerated process metadata without a permission prompt.
+- The Debug build, unit/integration tests, static analysis, formatting, lint, documentation, whitespace, security-pattern, and dependency checks pass. PR CI and review are pending. The local XCTest UI runner issue remains recorded; W002 diagnostic UI was manually inspected via accessibility scripting.
 
 ## Next
 
@@ -28,13 +31,13 @@ None recorded.
 
 ## Known Risks
 
-- Independent per-application gain, capture, permissions, sandbox, latency, and distribution remain unproven until Phase 0.
+- Independent per-application gain, process capture, exact audio activity semantics, minimum macOS, production sandbox/signing, latency, and distribution remain unproven until Phase 0.
 - No production bundle identifier or distribution channel has been selected.
-- This Mac's Xcode CoreDevice/CoreSimulator mismatch prevented the UI smoke runner from bootstrapping; visual Menu Bar inspection is pending.
+- This Mac's Xcode CoreDevice/CoreSimulator mismatch still prevents the XCTest UI runner from bootstrapping. W002's Menu Bar diagnostic was manually inspected through accessibility scripting.
 
 ## Important Recent Decisions
 
-- Product architecture remains provisional until Phase 0. No audio architecture ADR has been accepted.
+- Product architecture remains provisional until Phase 0. ADR-001 accepts only a bounded Core Audio discovery prototype direction; it is not a production topology or minimum-OS decision.
 
 ## Git State
 

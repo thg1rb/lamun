@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		18C891B3F4F2D30D591A1CB4 /* LamunLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE0C13F89DC838F87C58A0 /* LamunLaunchTests.swift */; };
+		B10000000000000000000001 /* AudioProcessDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000001 /* AudioProcessDiscovery.swift */; };
+		B10000000000000000000002 /* AudioProcessSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000002 /* AudioProcessSnapshot.swift */; };
+		B10000000000000000000003 /* AudioProcessDiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000003 /* AudioProcessDiscoveryView.swift */; };
+		B10000000000000000000004 /* AudioProcessSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000004 /* AudioProcessSnapshotTests.swift */; };
+		B10000000000000000000005 /* AudioProcessDiscoveryIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000005 /* AudioProcessDiscoveryIntegrationTests.swift */; };
 		778C358A1C6F7C52CB8071F5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D14572AC80FC79F30F9162F6 /* Cocoa.framework */; };
 		AEECCCB961165A0CEAD9BF0E /* LamunApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D4DC08D8845B842C66EA24 /* LamunApp.swift */; };
 		C162321209FC0C4C9951BD33 /* BootstrapConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CACE56DE1F3C22B60FB99E /* BootstrapConfigurationTests.swift */; };
@@ -34,6 +39,11 @@
 
 /* Begin PBXFileReference section */
 		3D7FF0EAB617F70F0096EC98 /* LamunTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LamunTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000001 /* AudioProcessDiscovery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProcessDiscovery.swift; sourceTree = "<group>"; };
+		A10000000000000000000002 /* AudioProcessSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProcessSnapshot.swift; sourceTree = "<group>"; };
+		A10000000000000000000003 /* AudioProcessDiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProcessDiscoveryView.swift; sourceTree = "<group>"; };
+		A10000000000000000000004 /* AudioProcessSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProcessSnapshotTests.swift; sourceTree = "<group>"; };
+		A10000000000000000000005 /* AudioProcessDiscoveryIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProcessDiscoveryIntegrationTests.swift; sourceTree = "<group>"; };
 		75531C0B37831EE4996AD100 /* LamunUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LamunUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		96E882F8E3FAB81090874BB6 /* Lamun.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lamun.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6DE0C13F89DC838F87C58A0 /* LamunLaunchTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LamunLaunchTests.swift; sourceTree = "<group>"; };
@@ -74,6 +84,9 @@
 		1F023697CAB9376529DE06C6 /* Lamun */ = {
 			isa = PBXGroup;
 			children = (
+				A10000000000000000000001 /* AudioProcessDiscovery.swift */,
+				A10000000000000000000002 /* AudioProcessSnapshot.swift */,
+				A10000000000000000000003 /* AudioProcessDiscoveryView.swift */,
 				F2D4DC08D8845B842C66EA24 /* LamunApp.swift */,
 				EF6568CC0B4961579C479F1E /* Lamun.entitlements */,
 			);
@@ -84,6 +97,8 @@
 		44B8505865974C7C81246F68 /* LamunTests */ = {
 			isa = PBXGroup;
 			children = (
+				A10000000000000000000004 /* AudioProcessSnapshotTests.swift */,
+				A10000000000000000000005 /* AudioProcessDiscoveryIntegrationTests.swift */,
 				D4CACE56DE1F3C22B60FB99E /* BootstrapConfigurationTests.swift */,
 			);
 			name = LamunTests;
@@ -252,6 +267,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B10000000000000000000001 /* AudioProcessDiscovery.swift in Sources */,
+				B10000000000000000000002 /* AudioProcessSnapshot.swift in Sources */,
+				B10000000000000000000003 /* AudioProcessDiscoveryView.swift in Sources */,
 				AEECCCB961165A0CEAD9BF0E /* LamunApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -260,6 +278,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B10000000000000000000004 /* AudioProcessSnapshotTests.swift in Sources */,
+				B10000000000000000000005 /* AudioProcessDiscoveryIntegrationTests.swift in Sources */,
 				C162321209FC0C4C9951BD33 /* BootstrapConfigurationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
