@@ -6,7 +6,7 @@ Phase 0 — Technical Feasibility.
 
 ## Current Work
 
-W003 — Independent Per-Application Gain Feasibility (`docs/work/003-per-app-gain-feasibility.md`). Status: In Progress on `feature/per-app-gain-poc`.
+W003 — Independent Per-Application Gain Feasibility (`docs/work/003-per-app-gain-feasibility.md`). Status: In Progress on `feature/per-app-gain-poc`; local POC and automated checks are complete, with review/CI/merge and several hardware/distribution gates outstanding.
 
 ## Completed
 
@@ -19,6 +19,9 @@ W003 — Independent Per-Application Gain Feasibility (`docs/work/003-per-app-ga
 - W003 combines the former W003 process-capture/permission item and former W004 independent-gain item. The scope revision and dependencies are recorded in `docs/PLAN.md`; W003 has not yet produced an architecture conclusion.
 - W002 — Audio Process Discovery completed and merged in [PR #3](https://github.com/thg1rb/lamun/pull/3) at `47f35e2`. Public Core Audio discovery was observed with IINA, Safari, and Chrome Guest. Chrome audio appeared as a helper process; output-I/O state is not exact playback/pause state.
 - W002 observed an ad-hoc signed Debug build with the App Sandbox entitlement enumerating process metadata without a permission prompt. This does not validate audio capture or distribution behavior.
+- W003's DEBUG-only Core Audio process-tap POC independently scaled IINA and Chrome helper streams at measured RMS ratios 0.249 and 0.499 for requested gains 0.25 and 0.50. Safari remained a third active output client and system output scalar remained 0.25. See [ADR-002](./decisions/ADR-002-per-app-gain-architecture.md) for provisional Outcome B and its limits.
+- W003 local validation: Debug build, Release build, `LamunTests`, Xcode static analysis, format, lint, docs, whitespace, security baseline, and dependency baseline passed. Xcode emits the existing CoreDevice/CoreSimulator mismatch warnings; the UI test runner issue remains unresolved and is not treated as passed.
+- W003 remaining unvalidated: acoustic listening/loopback and duplicate-leakage assessment, active physical output switching (no second physical device available), permission denial/recovery, five-minute resource/energy sampling, abnormal termination recovery, non-Float32/channel layouts, and Developer ID signed/notarized distribution (no valid identity installed). Mac App Store status remains unknown.
 
 ## Next
 
@@ -30,7 +33,7 @@ None recorded.
 
 ## Known Risks
 
-- Independent per-application gain, process capture, permissions, exact audio activity semantics, minimum macOS, production sandbox/signing, latency, and distribution remain unproven until Phase 0.
+- Independent process-level signal gain is demonstrated on one host through a DEBUG-only tap/aggregate/HAL callback POC; audible quality, other formats/devices, permission failure behavior, minimum macOS, production sandbox/signing, full latency, and distribution remain unproven until Phase 0.
 - A Developer ID signed/notarized direct-distribution path is the W003 minimum distribution feasibility gate; Mac App Store support must be assessed separately.
 - This Mac's Xcode CoreDevice/CoreSimulator mismatch still prevents the XCTest UI runner from bootstrapping. W002's Menu Bar diagnostic was manually inspected through accessibility scripting.
 

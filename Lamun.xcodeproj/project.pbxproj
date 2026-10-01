@@ -11,6 +11,7 @@
 		B10000000000000000000001 /* AudioProcessDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000001 /* AudioProcessDiscovery.swift */; };
 		B10000000000000000000002 /* AudioProcessSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000002 /* AudioProcessSnapshot.swift */; };
 		B10000000000000000000003 /* AudioProcessDiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000003 /* AudioProcessDiscoveryView.swift */; };
+		B10000000000000000000006 /* AudioGainProofOfConcept.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000006 /* AudioGainProofOfConcept.swift */; };
 		B10000000000000000000004 /* AudioProcessSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000004 /* AudioProcessSnapshotTests.swift */; };
 		B10000000000000000000005 /* AudioProcessDiscoveryIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000005 /* AudioProcessDiscoveryIntegrationTests.swift */; };
 		778C358A1C6F7C52CB8071F5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D14572AC80FC79F30F9162F6 /* Cocoa.framework */; };
@@ -44,6 +45,7 @@
 		A10000000000000000000003 /* AudioProcessDiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProcessDiscoveryView.swift; sourceTree = "<group>"; };
 		A10000000000000000000004 /* AudioProcessSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProcessSnapshotTests.swift; sourceTree = "<group>"; };
 		A10000000000000000000005 /* AudioProcessDiscoveryIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProcessDiscoveryIntegrationTests.swift; sourceTree = "<group>"; };
+		A10000000000000000000006 /* AudioGainProofOfConcept.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioGainProofOfConcept.swift; sourceTree = "<group>"; };
 		75531C0B37831EE4996AD100 /* LamunUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LamunUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		96E882F8E3FAB81090874BB6 /* Lamun.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lamun.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6DE0C13F89DC838F87C58A0 /* LamunLaunchTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LamunLaunchTests.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				A10000000000000000000001 /* AudioProcessDiscovery.swift */,
 				A10000000000000000000002 /* AudioProcessSnapshot.swift */,
 				A10000000000000000000003 /* AudioProcessDiscoveryView.swift */,
+				A10000000000000000000006 /* AudioGainProofOfConcept.swift */,
 				F2D4DC08D8845B842C66EA24 /* LamunApp.swift */,
 				EF6568CC0B4961579C479F1E /* Lamun.entitlements */,
 			);
@@ -270,6 +273,7 @@
 				B10000000000000000000001 /* AudioProcessDiscovery.swift in Sources */,
 				B10000000000000000000002 /* AudioProcessSnapshot.swift in Sources */,
 				B10000000000000000000003 /* AudioProcessDiscoveryView.swift in Sources */,
+				B10000000000000000000006 /* AudioGainProofOfConcept.swift in Sources */,
 				AEECCCB961165A0CEAD9BF0E /* LamunApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -461,11 +465,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Lamun/Lamun.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Lamun/Lamun-Debug.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_KEY_CFBundleDisplayName = Lamun;
 				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_FILE = Lamun/Info-Debug.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.example.lamun.bootstrap;

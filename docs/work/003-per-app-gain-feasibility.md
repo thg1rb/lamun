@@ -2,7 +2,7 @@
 
 ## Status
 
-In Progress — Phase 0. Scope consolidates the former W003 process-capture/permission POC and former W004 independent-gain/routing POC. See the dated revision note in `docs/PLAN.md`.
+In Progress — Phase 0. Local POC, documentation updates, and automated validation are complete; read-only review, CI, PR integration, and the remaining device/distribution limitations are outstanding. Scope consolidates the former W003 process-capture/permission POC and former W004 independent-gain/routing POC. See the dated revision note in `docs/PLAN.md`.
 
 ## Context
 
@@ -158,32 +158,90 @@ The hard feasibility gate is a credible Developer ID signed and notarized direct
 
 ## Experiments
 
-To be filled incrementally, with each entry labeled **Confirmed**, **Observed**, **Measured**, **Inferred**, **Unknown**, or **Not Tested**, setup and OS/Xcode/device details, and links to primary references.
+### X-001 — SDK/API and permission review
+
+- **Confirmed:** Current public `AudioHardwareProcess` metadata API and the local macOS 27 SDK process property declarations expose process identity/output state, but no arbitrary per-process gain setter was found. `kAudioDevicePropertyProcessMute` is a mute property for the current client on a physical device; it is not an arbitrary gain API.
+- **Confirmed:** Apple's public Process Tap API supports capturing process output and offers mute modes. `mutedWhenTapped` suppresses the original while another client reads the tap. A tap is read as an input of an aggregate device. The documented permission key is `NSAudioCaptureUsageDescription`; first tap/aggregate use prompted for system-audio recording permission.
+- **Observed:** The initial Debug generated plist silently omitted the requested purpose key. Replacing only the Debug generated plist with `Lamun/Info-Debug.plist` made the key present in the built bundle. The Debug target now uses a separate sandbox plus `com.apple.security.device.audio-input` entitlement. A dedicated Release entitlement file is not used; Release remains on the existing app-sandbox-only entitlements.
+- **Observed:** With AVAudioEngine consuming a private aggregate containing only the tap and rendering to the default output separately, `AVAudioEngine.start()` failed with AVFAudio error `-10875` (`kAudioUnitErr_FailedInitialization`). Adding the standard audio-input entitlement did not change this result.
+- **Observed:** Switching the POC to a HAL aggregate containing the tap and built-in output subdevice, with a HAL I/O callback reading tap buffers and writing output buffers, started successfully and delivered nonzero Float32 stereo samples. This is the candidate C topology currently under test; it is not a production decision.
+- **Confirmed source:** [Apple Process Tap capture guide](https://developer.apple.com/documentation/coreaudio/capturing-system-audio-with-core-audio-taps), [Apple `AudioHardwareProcess`](https://developer.apple.com/documentation/coreaudio/audiohardwareprocess), [Apple `CATapMuteBehavior`](https://developer.apple.com/documentation/coreaudio/catapmutebehavior), [Apple audio-input entitlement](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.device.audio-input), [Apple notarization requirements](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution).
+
+### X-002 — Two-process gain and third-process activity
+
+- Setup: macOS 27.0, Xcode 27.0 / SDK 27.0, MacBook Pro Speakers, 48 kHz, synthetic local stereo PCM tones in IINA and Chrome, Safari playback later used as an untargeted third process. No recorded/user audio. App was an ad-hoc signed Debug build with App Sandbox, audio-input entitlement, `get-task-allow`, and granted System Audio Recording permission; this does not represent Developer ID distribution signing.
+- **Observed:** Core Audio exposed IINA (`com.colliderli.iina`, PID 46960, object 128), Chrome helper (`com.google.Chrome.helper`, PID 47149, object 129), and Safari WebKit GPU (`com.apple.WebKit.GPU`, PID 93189, object 124) as separate output-I/O clients. These are process identities, not a proven final app-grouping policy.
+- **Measured:** IINA and Chrome each ran a private tap + private aggregate with the same physical output as a subdevice. Each callback exposed one 2-channel input buffer and one 2-channel output buffer, each 4096 bytes (512 Float32 stereo frames; 10.67 ms at 48 kHz). Both streams delivered nonzero samples concurrently.
+- **Measured:** IINA at gain 0.25: input RMS 0.1079 → output RMS 0.0269 (0.249 ratio); Chrome at gain 1.00: input RMS 0.0565 → output RMS 0.0565. After changing Chrome to 0.50, Chrome measured 0.0565 → 0.0282 (0.499 ratio), while IINA remained at 0.25 (later input/output 0.1054 → 0.0263). Values are transient callback metrics only.
+- **Inferred from documented mute mode and observed callback:** In `mutedWhenTapped`, the original targeted client is suppressed for tap reads while the captured frames are written to the aggregate's physical output. This removes the deliberate double-output path. Acoustic listening and analog loopback were not performed, so perceived sound quality/double-output remains **Not Tested**.
+- **Observed:** While A/B sessions were active and Safari's WebKit GPU process remained output-I/O active, the physical output device's master scalar volume read 0.25 both before and after the gain experiments. This supports isolation from master volume; it is not a calibrated acoustic comparison of Safari's level.
+- **Measured:** Callback input-to-output host-time delta p50/p95/max was 23.90/23.90/23.90 ms for the active streams. This timestamp delta is a repeatable graph metric, not a complete acoustic round-trip measurement. Built-in output reports 512-frame nominal buffer, 70-frame output latency and 74-frame safety offset at 48 kHz (1.46 ms and 1.54 ms respectively); end-to-end speaker latency was **Not Tested**.
+- **Measured:** During the two-session + discovery diagnostic interval, `ps` sampled Lamun at 4.5% CPU and 89,520 KiB RSS. During a later single-session diagnostic interval, three `top` observations showed 0.0%, 5.8%, and 7.0% CPU with about 34 MiB reported memory. These are point samples with no controlled idle comparison, not a five-minute profile or energy measurement.
+- **Observed:** Process-list callbacks during Safari/process churn surfaced Core Audio listener remove/register warnings for process objects that had already become invalid. This appears to be W002 discovery lifecycle behavior and is recorded for review; the gain callbacks continued to run.
+- **Observed:** The earlier MenuBarExtra-hosted live list produced a Lamun crash report due SwiftUI graph recursion while the menu contents changed. W003 moved the diagnostic into a dedicated DEBUG window and reduced dynamic menu contents. The crash artifact is local and is not committed.
+- **Observed:** With a Chrome helper tap session active at unity, the diagnostic's “Stop all sessions and quit Lamun” action stopped the Lamun process. Core Audio still showed Chrome and Safari as output clients afterward. This is normal-quit recovery evidence only; abnormal termination/crash recovery was not tested.
+- **Observed:** Quitting Chrome while its tap was active removed the old Chrome process row/session during reconciliation. Relaunching Chrome created helper PID 68306 / AudioObjectID 137 instead of PID 47149 / object 129, with the same `com.google.Chrome.helper` bundle identifier and no inherited gain. One stale-object listener cleanup warning was reported by discovery during churn.
+- **Observed:** The final single-session diagnostic sample was input/output RMS 0.0566 → 0.0566 at unity, with a 23.90 ms graph callback delta. This reproduces unity preservation; the earlier two-process run records measured 0.25 and 0.50 attenuation and zero output.
+- **Observed:** Local output inventory included MacBook Pro Speakers and a Teams virtual output. No second physical output was available; switching an active pipeline was not tested.
+- **Observed:** `security find-identity -v -p codesigning` reported zero valid signing identities. Developer ID signed/notarized direct distribution could not be experimentally validated. The Mac App Store path remains unknown.
+- **Observed:** The system-audio recording permission prompt appeared for the Debug process-tap experiment and was granted. Permission denial, revocation, and recovery through System Settings were not tested.
+- **Not Tested:** No acoustic listening test or analog/loopback recording was performed. Therefore clicks, pops, dropouts, echo, duplicates, pitch/timing drift, channel imbalance, resampling artifacts, or audible leakage are not characterized. RMS measurements prove sample scaling within the callback, not listener-perceived output quality.
+- **Not Tested:** Five-minute idle/one/two-target resource sampling and energy observations. The available CPU/RSS values are point samples only.
+- **Not Tested:** Non-Float32 formats, non-stereo/channel layouts, Bluetooth/external device switching, output-device disappearance, explicit permission denial, abnormal process exit, render failure injection, full app restart recovery, and full acoustic end-to-end latency.
+
+### X-003 — Lifecycle, shutdown, and environment limits
+
+- **Observed:** Chrome target termination while tapped caused reconciliation to stop/remove the session; Chrome relaunch appeared with a new PID and AudioObjectID and unity default gain. The exact pause/resume transition was not separately measured.
+- **Observed:** Normal Lamun quit used the explicit stop-all path and the process exited; Chrome and Safari remained listed as audio clients. The HAL tap/aggregate/IOProc destroy calls are in the stop path. Core Audio object inventory before/after and abnormal-exit recovery were not captured.
+- **Not Tested:** Physical output change while active (no second physical device), five-minute load comparisons, acoustic loopback/listening, permission denial/recovery, and Developer ID notarization (no identity/certificate available).
+- **Not Tested:** Candidate C in formats besides observed Float32 stereo, or with Bluetooth/external hardware. The callback currently assumes Float32 sample buffers and writes zeros for channel/format mismatch; this is not sufficient format support for production.
+
+### X-004 — Local quality and deterministic tests
+
+- **Confirmed:** `AudioGainValue.normalized` clamps finite inputs to `[0, 1]` and maps nonfinite values to unity; parameterized Swift Testing covers range points, over/under-range input, NaN, and infinity.
+- **Confirmed:** Project-local Skill visibility was rechecked using `npx skills list --json`. `swift-testing-expert` guidance was read; no suitable dedicated Core Audio Skill was discovered, so Apple documentation and SDK declarations remain the technical authority.
+- **Confirmed:** Debug build metadata contains `NSAudioCaptureUsageDescription`; the Debug app has sandbox and audio-input entitlements. Release remains on the bootstrap sandbox entitlement and does not enable capture.
+- **Observed:** Initial Debug generated Info.plist omitted the requested usage string. The Debug target now uses `Lamun/Info-Debug.plist` to include it explicitly.
 
 ## Findings
 
-No W003 experiment results yet.
+- **Confirmed (reviewed API surface):** No supported public arbitrary per-process gain setter was found in the current `AudioHardwareProcess` documentation/local SDK declarations reviewed. `kAudioDevicePropertyProcessMute` is a mute property and does not provide arbitrary gain. Device volume is not per-process gain.
+- **Observed:** Candidate B with a tap-only aggregate consumed by `AVAudioEngine` failed to initialize on this host (`-10875`).
+- **Measured:** Candidate C (one process tap and private aggregate containing that tap plus the selected physical output, with gain in a HAL I/O callback) scaled two simultaneously running process streams independently. The per-process RMS ratios matched the applied 0.25 and 0.50 gains within measurement rounding; zero produced zero callback output, and unity preserved the signal.
+- **Observed / inferred:** Core Audio reported a third Safari WebKit client active and physical master scalar remained 0.25 while targets changed. This supports non-interference at process/client and master-property level; no calibrated acoustic test establishes that Safari sounded unchanged.
+- **Outcome B — Tap/Re-render feasible for continued feasibility:** Current evidence justifies continuing Phase 0 with Candidate C, not starting product implementation. Two process signal paths and normal stop/relaunch behavior were demonstrated, but the full W003 gates are not all validated. In particular, acoustic quality and duplicate/leakage listening, active device switching, permission denial/recovery, longer resource sampling, abnormal cleanup, and Developer ID signed/notarized distribution remain open. Mac App Store status is unknown. See [ADR-002](../decisions/ADR-002-per-app-gain-architecture.md).
 
 ## Measurements
 
-Record per configuration: output device; process IDs/object IDs/app mapping; sample rate and channel layout; input/output frames and buffer durations; added-latency p50/p95/max; CPU/RSS sample range; energy note; gain steps; transient RMS ratios; audible artifacts; start/stop/recovery results. Do not save audio samples or raw callback payloads.
+Recorded values and limits are in X-002 and X-003. The 23.90 ms p50/p95/max value is only the delta between aggregate callback host timestamps; do not interpret it as total tap-to-speaker or acoustic latency. Built-in output reports 512-frame nominal buffer, 70-frame device latency, and 74-frame safety offset at 48 kHz. No complete end-to-end latency measurement exists. Do not save audio samples or raw callback payloads.
 
 ## Implementation Notes
 
-Planning and this work document precede substantive source changes. Branch: `feature/per-app-gain-poc`, from `develop`. Do not add production controls or persist gain. Keep POC APIs internal/debug-only and lifecycle ownership outside SwiftUI.
+Planning and this work document preceded substantive source changes. Branch: `feature/per-app-gain-poc`, from `develop`. The service/UI compile only in DEBUG. Gain is session-only and transient. Audio resource ownership is outside SwiftUI; the view starts/stops sessions and reconciles terminated process objects. The IO callback applies Float32 gain and updates lock-free transient measurements; it does not write samples or update UI directly. The output format assumption is validated only for this observed configuration. A first callback implementation inherited main-actor executor isolation and crashed; the block factory was changed to a nonisolated helper and this failure has not recurred during observed sessions. Dynamic MenuBarExtra content also crashed and was moved to a separate diagnostic window. Both are important prototype limitations, not production fixes.
+
+### Local validation (2026-10-01)
+
+- **Passed:** Debug build with ad-hoc signing enabled and required audio capture purpose string/entitlements.
+- **Passed:** `LamunTests` unit tests via `xcodebuild -only-testing:LamunTests test`.
+- **Passed:** Release configuration build; this caught and prompted correction of the DEBUG-only quit-notification reference.
+- **Passed:** Xcode static analysis (`xcodebuild analyze`).
+- **Passed:** `scripts/check-format.sh`, `scripts/check-lint.sh`, `scripts/check-docs.py`, `scripts/check-whitespace.py`, `scripts/check-security.py`, and `scripts/check-dependencies.py`.
+- **Observed warning:** All local Xcode invocations continue to emit the known CoreDevice/CoreSimulator mismatch. The Lamun unit target still ran successfully. The W001 UI test runner issue remains unresolved and is not marked passed.
+- **Not run:** XCTest UI target because its known runner-bootstrap failure is unrelated and persists. The diagnostic window itself was manually operated during the audio POC.
+- **Pending:** Independent read-only code review, GitHub CI, and PR integration. No merge has occurred.
 
 ## Result
 
-Pending experiments, validation, review, and merge.
+Outcome B is provisionally justified for continued Phase 0 work. The W003 work item is not complete: acoustic output quality, physical device switching, permission denial/recovery, endurance/resource comparisons, abnormal cleanup, and Developer ID signed/notarized validation remain open. Automated checks and independent review/CI/merge are pending.
 
 ## Architecture Decision
 
-Pending evidence. Use one of the explicit outcomes: A — direct gain feasible; B — tap/re-render feasible; C — virtual device required; D — requirements need re-planning. Record Mac App Store status separately. If no outcome can be justified, leave the decision unresolved and do not unlock W007.
+Provisional Outcome B — tap/re-render is feasible on the tested host using Candidate C's tap-plus-physical-output aggregate and HAL callback. ADR-002 records evidence and limits. This does not unlock production mixer work: Phase 0 distribution, device, format, lifecycle, and acoustic gates remain open. Mac App Store status is Unknown; direct Developer ID signed/notarized distribution is assessed but not experimentally validated.
 
 ## Deviations From Plan
 
-None at start. Record the scope consolidation here and in `docs/PLAN.md`; record later changes with evidence.
+The approved W003 scope was expanded to combine capture and gain feasibility. The DEBUG prototype uses a HAL I/O callback with the physical output included in the aggregate after AVAudioEngine failed on a tap-only aggregate. A Debug-only Info.plist was added because the generated plist omitted the permission purpose string. The dynamic process diagnostic was moved from the Menu Bar into a window after a SwiftUI crash. A nonisolated callback factory was added after an actor-executor crash. These changes are limited to the feasibility POC and are documented above.
 
 ## Follow-up Work
 
-W004 extended lifecycle/endurance validation, W005 Smart Ducking input feasibility, and W006 Phase 0 synthesis remain conditional on the W003 outcome. Do not start any follow-up in this work cycle.
+Before W003 closeout, complete remaining feasible checks and explicitly disposition unavailable hardware/signing tests. After W003 merge, stop for status review. The next work item is not authorized by this document alone; update `docs/PLAN.md`/`PROJECT-STATUS.md` based on the W003 outcome and unresolved feasibility gates. Do not start follow-up work in this cycle.

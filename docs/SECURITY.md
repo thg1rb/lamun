@@ -4,7 +4,9 @@
 
 W002's DEBUG-only diagnostic reads Core Audio process metadata and output-I/O state. It does not create a tap, read audio samples, request microphone access, persist process history, or send data over the network. No permission prompt appeared during the metadata-only local probe. W002 observed that an ad-hoc signed Debug build embedded the App Sandbox entitlement and enumerated process metadata without a prompt. This is limited local Debug evidence; it does not validate capture permission, Hardened Runtime, Developer ID signing/notarization, App Store eligibility, or production distribution. See [W002 findings](./work/002-audio-process-discovery.md).
 
-W003 is evaluating a DEBUG-only process-tap/gain/render proof of concept. Until results are recorded in [the W003 work document](./work/003-per-app-gain-feasibility.md), capture permissions, audio-buffer handling, and distribution support remain unverified. The POC must keep audio transient in memory and must not write, upload, transcribe, log, or analyze captured content beyond gain processing and ephemeral signal measurement.
+W003's DEBUG-only POC captures a process tap, applies gain in a HAL callback, and re-renders to a private aggregate containing the physical output. The Debug target has App Sandbox plus `com.apple.security.device.audio-input`; `NSAudioCaptureUsageDescription` is present in its built Info.plist. The OS System Audio Recording prompt appeared and was granted. Samples are transient callback memory used only for gain and ephemeral RMS metrics; there is no audio-file, network, or content logging path. Permission denial/recovery was not tested. Release remains on the existing sandbox entitlement and does not enable this POC.
+
+An ad-hoc signed Debug experiment does not prove Developer ID signed/notarized distribution. No local signing identities were available, so direct distribution remains unvalidated; Mac App Store acceptance is unknown. See [ADR-002](./decisions/ADR-002-per-app-gain-architecture.md) and [W003](./work/003-per-app-gain-feasibility.md).
 
 ## Privacy Requirements
 
@@ -27,4 +29,4 @@ The production bundle identifier, Mac App Store suitability, direct distribution
 
 Record a finding's severity, affected component, threat, remediation, verification, and residual risk in a work document or this file. Update [RISK-REGISTER.md](./RISK-REGISTER.md) for ongoing risks. No product security finding has been confirmed in W001.
 
-The W002 sandbox-enabled Debug metadata observation and W003 capture/distribution investigation are recorded in their work documents; no capture result is yet established.
+The W002 sandbox-enabled Debug metadata observation and W003 transient capture results are recorded in their work documents. W003 does not establish production permission or distribution behavior.

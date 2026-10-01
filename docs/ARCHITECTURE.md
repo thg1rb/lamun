@@ -4,7 +4,7 @@
 
 W002 adds a DEBUG-only process-discovery diagnostic on macOS 15 and later. `AudioProcessDiscovery` listens to Core Audio process-list and per-process output-state properties and emits copied `AudioProcessSnapshot` values; the diagnostic view resolves optional process metadata through `NSRunningApplication`. This prototype reads no audio samples. The tested output-state property identifies active output streams, not whether a stream currently carries audible samples. Its Core Audio Swift wrapper is unavailable below macOS 15 while Lamun's provisional deployment target remains 14.2. See [ADR-001](./decisions/ADR-001-process-discovery-prototype.md) and [W002 findings](./work/002-audio-process-discovery.md).
 
-W003 is an in-progress DEBUG-only feasibility experiment for process-tap capture, original-output suppression, gain processing, and physical-output rendering. It does not establish a production topology. See [W003](./work/003-per-app-gain-feasibility.md). The former separate capture and gain work items were consolidated in the [plan revision](./PLAN.md#1-purpose).
+W003 has demonstrated a DEBUG-only process-tap topology on one host: one private aggregate per target includes the tap and the selected physical output, and a HAL I/O callback applies normalized gain. Two process streams were independently scaled. This is a provisional Phase 0 result, not a production topology; Float32/two-channel assumptions, acoustic quality, device switching, failure recovery, app grouping, and Developer ID distribution remain unvalidated. See [ADR-002](./decisions/ADR-002-per-app-gain-architecture.md) and [W003](./work/003-per-app-gain-feasibility.md). The former separate capture and gain work items were consolidated in the [plan revision](./PLAN.md#1-purpose).
 
 ## Provisional Direction
 
@@ -30,8 +30,8 @@ No production audio control state exists. The W002 diagnostic distinguishes HAL-
 
 ## Permissions and System Integration
 
-The bootstrap app requests no audio permission and has no audio entitlements. Phase 0 will document actual permissions, App Sandbox requirements, minimum macOS target, and distribution constraints. Optional Launch at Login is a Phase 1 feature.
+The Release configuration remains on the bootstrap sandbox entitlement. The DEBUG-only W003 POC adds the audio-input entitlement and `NSAudioCaptureUsageDescription`; the user granted System Audio Recording access on the test host. No minimum macOS target or distribution configuration is finalized. Optional Launch at Login is a Phase 1 feature.
 
 ## Decisions
 
-ADR-001 accepts only a bounded discovery prototype direction, not a production audio architecture. Use [decisions/](./decisions/) for future evidence-backed ADRs, and update this document to describe implemented behavior rather than a stale plan.
+ADR-001 accepts only a bounded discovery prototype direction. ADR-002 provisionally selects a tap/aggregate/HAL callback topology for continued feasibility testing, not production. Use [decisions/](./decisions/) for evidence-backed ADRs, and update this document to describe implemented behavior rather than a stale plan.
