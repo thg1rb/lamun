@@ -72,14 +72,14 @@ Lamun has a complete product and engineering specification and an approved devel
 
 ## Acceptance Criteria
 
-- [ ] The approved plan and W001 work document are persisted; the required project docs and directories exist and reflect actual state.
-- [ ] `main`, `develop`, and `feature/project-bootstrap` exist with bootstrap changes isolated to the feature branch.
-- [ ] The native Menu Bar app and baseline test targets build locally with a shared scheme.
-- [ ] Formatting, lint, build, unit tests, static analysis, documentation, and security/dependency checks run with documented commands.
-- [ ] GitHub Actions uses a supported macOS runner and compatible Xcode and passes on the W001 PR.
-- [ ] Built-in Skills are inspected; discovery, candidate evaluation, any installation, and verification are documented.
-- [ ] PR template and branch protection plan are present.
-- [ ] Review-only Sub-agent reports findings; main Agent resolves required findings and reruns checks.
+- [x] The approved plan and W001 work document are persisted; the required project docs and directories exist and reflect actual state.
+- [x] `main`, `develop`, and `feature/project-bootstrap` exist with bootstrap changes isolated to the feature branch.
+- [x] The native Menu Bar app and baseline test targets build locally with a shared scheme.
+- [x] Formatting, lint, build, unit tests, static analysis, documentation, and security/dependency checks run with documented commands.
+- [x] GitHub Actions uses a supported macOS runner and compatible Xcode and passes on the W001 PR.
+- [x] Built-in Skills are inspected; discovery, candidate evaluation, any installation, and verification are documented.
+- [x] PR template and branch protection plan are present.
+- [x] Review-only Sub-agent reports findings; main Agent resolves required findings and reruns checks.
 - [ ] W001 is merged to `develop` only after Definition of Done, with status updated honestly.
 
 ## Test Plan
@@ -103,7 +103,7 @@ Planning sections were completed before substantial bootstrap implementation.
 
 ## Result
 
-Local baseline is built and checked. [PR #1](https://github.com/thg1rb/lamun/pull/1) is open to `develop`; its first GitHub Actions quality run passed. Review-only Sub-agent findings are being resolved before a final CI run and merge.
+Local baseline is built and checked. [PR #1](https://github.com/thg1rb/lamun/pull/1) is open to `develop`; its initial and post-review GitHub Actions quality runs passed. The review-only Sub-agent found no remaining blocker. Branch protection is active on `develop` and `main`. Final documentation CI and merge remain.
 
 Local validation on macOS 27.0 / Xcode 27.0:
 
@@ -112,7 +112,10 @@ Local validation on macOS 27.0 / Xcode 27.0:
 - `xcodebuild analyze`: passed.
 - Format, lint, documentation links, security baseline, dependency baseline: passed.
 - `actionlint` v1.7.12: passed for `.github/workflows/ci.yml`.
-- Initial PR CI quality run `36835523478`: passed (documentation, format, lint, security, dependencies, build, unit tests, static analysis). Final post-review CI remains pending.
+- Initial PR CI quality run `36835523478`: passed (documentation, format, lint, security, dependencies, build, unit tests, static analysis).
+- Post-review PR CI quality run `36835936365`: passed, including the new first-party whitespace gate.
+- Review-only Sub-agent follow-up on commit `4f785fa`: license and status findings resolved; vendor whitespace exception documented and accepted; no new actionable findings. The reviewer made no file changes.
+- GitHub branch protection verified on `develop` and `main`: pull requests, strict required checks (`quality`; also `release-configuration` on `main`), administrator enforcement, linear history, conversation resolution, and force-push/deletion blocks.
 - UI target compiled; UI test runner exited before establishing a connection. This local Xcode also reports a CoreDevice/CoreSimulator version mismatch. Root cause is unproven; the UI smoke result remains open and is not reported as passed.
 - Built app launched as a process from Finder/open; Menu Bar accessibility inspection timed out, so visual presence remains unverified.
 
@@ -124,6 +127,6 @@ The review-only Sub-agent found copied Skills lacked retained upstream license n
 
 ## Follow-up Work
 
-- Rerun local checks and PR CI after review fixes, verify branch protection, and merge W001.
+- Final documentation CI and W001 merge remain. After merge, update the project status to record W001 complete.
 - Resolve the local Xcode CoreDevice/CoreSimulator mismatch or run UI smoke validation on a healthy Mac. Do not mistake this environment failure for a passing UI test.
 - W002 — Audio Process Discovery, after W001 meets its exit criteria. Do not begin it in this work cycle.

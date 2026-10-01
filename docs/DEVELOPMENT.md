@@ -47,7 +47,7 @@ The W001 PR is `feature/project-bootstrap` → `develop`. Each significant PR re
 
 `.github/workflows/ci.yml` runs for PRs and pushes involving `develop` or `main`. It checks docs, format, lint, entitlements/secret patterns, the zero-runtime-dependency baseline, build, unit tests, and Xcode static analysis. A release PR additionally builds Release configuration. Hardware audio and distribution validation require later phase-specific manual gates.
 
-Repository administrators should configure rulesets for `develop` and `main`: require PRs, the `quality` check, up-to-date branches, conversation resolution, no force pushes or deletion, and reviews where available. Require `release-configuration` on PRs to `main` and stricter release review. Verify exact required check names after the first CI run. Do not claim protection is active until GitHub settings confirm it.
+GitHub branch protection is active on `develop` and `main` (verified during W001). Both require PRs, up-to-date `quality` checks, conversation resolution, linear history, and block force pushes and deletion, including for administrators. `main` additionally requires `release-configuration` on release PRs. GitHub currently requires zero approving human reviews; the review-only Sub-agent gate remains mandatory under [PROJECT-RULES.md](./PROJECT-RULES.md). Recheck the exact required check names and protection settings when CI or repository policy changes.
 
 ## Release Workflow
 
