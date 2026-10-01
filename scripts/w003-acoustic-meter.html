@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Lamun W003 Acoustic Meter</title>
+<body>
+  <h1>Lamun W003 acoustic meter</h1>
+  <p>Uses the microphone only while this page is active. It calculates tone levels in memory and never saves audio.</p>
+  <label for="microphone">Microphone:</label>
+  <select id="microphone"><option value="">System default</option></select>
+  <button id="refresh">Refresh microphones</button>
+  <button id="start">Start microphone meter</button>
+  <button id="sample" disabled>Sample now</button>
+  <button id="stop" disabled>Stop</button>
+  <p id="status" role="status">Idle</p>
+  <pre id="levels" aria-live="polite">440 Hz: —
+660 Hz: —
+880 Hz: —</pre>
+  <script>
+    const frequencies = [440, 660, 880];
+    let stream;
+    let context;
+    let timer;
+    let analyser;
+    let samples;
+
+    function sampleNow() {
+      analyser.getFloatTimeDomainData(samples);
+      document.querySelector("#levels").textContent = frequencies.map((frequency) =>
+        `${frequency} Hz: ${decibels(samples, frequency, context.sampleRate).toFixed(2)} dBFS`
+      ).join("\n");
+    }
+
+    async function refreshMicrophones() {
+      const selected = document.querySelector("#microphone").value;
+      const inputs = (await navigator.mediaDevices.enumerateDevices())
+        .filter((device) => device.kind === "audioinput");
+      document.querySelector("#microphone").replaceChildren(
+        new Option("System default", ""),
+        ...inputs.map((device) => new Option(device.label || "Unnamed input", device.deviceId))
+      );
+      document.querySelector("#microphone").value = selected;
+    }
+
+    document.querySelector("#refresh").onclick = refreshMicrophones;
+    refreshMicrophones();
+
+    function decibels(samples, frequency, sampleRate) {
+      let real = 0;
+      let imaginary = 0;
+      let weightSum = 0;
+      for (let index = 0; index < samples.length; index += 1) {
+        const weight = 0.5 - 0.5 * Math.cos(2 * Math.PI * index / (samples.length - 1));
+        const angle = 2 * Math.PI * frequency * index / sampleRate;
+        real += samples[index] * weight * Math.cos(angle);
+        imaginary -= samples[index] * weight * Math.sin(angle);
+        weightSum += weight;
+      }
+      const amplitude = 2 * Math.hypot(real, imaginary) / weightSum;
+      return 20 * Math.log10(Math.max(amplitude, 1e-12));
+    }
+
+    document.querySelector("#start").onclick = async () => {
+      try {
+        const deviceId = document.querySelector("#microphone").value;
+        stream = await navigator.mediaDevices.getUserMedia({ audio: {
+          ...(deviceId ? { deviceId: { exact: deviceId } } : {}),
+          echoCancellation: false, noiseSuppression: false, autoGainControl: false
+        } });
+        context = new AudioContext();
+        const source = context.createMediaStreamSource(stream);
+        analyser = context.createAnalyser();
+        analyser.fftSize = 8192;
+        source.connect(analyser);
+        samples = new Float32Array(analyser.fftSize);
+        const settings = stream.getAudioTracks()[0].getSettings();
+        document.querySelector("#status").textContent =
+          `${stream.getAudioTracks()[0].label}; measuring at ${context.sampleRate} Hz; echo cancellation ${settings.echoCancellation}, noise suppression ${settings.noiseSuppression}, automatic gain ${settings.autoGainControl}`;
+        refreshMicrophones();
+        sampleNow();
+        timer = setInterval(sampleNow, 500);
+        document.querySelector("#start").disabled = true;
+        document.querySelector("#sample").disabled = false;
+        document.querySelector("#stop").disabled = false;
+      } catch (error) {
+        document.querySelector("#status").textContent = `Microphone unavailable: ${error.name}`;
+      }
+    };
+
+    document.querySelector("#sample").onclick = sampleNow;
+
+    document.querySelector("#stop").onclick = async () => {
+      clearInterval(timer);
+      stream.getTracks().forEach((track) => track.stop());
+      await context.close();
+      document.querySelector("#start").disabled = false;
+      document.querySelector("#sample").disabled = true;
+      document.querySelector("#stop").disabled = true;
+      document.querySelector("#status").textContent = "Stopped; microphone released";
+    };
+  </script>
+</body>
+</html>

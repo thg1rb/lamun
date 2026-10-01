@@ -6,6 +6,28 @@ import Testing
 
 @Suite("Audio process snapshot")
 struct AudioProcessSnapshotTests {
+  @Test(
+    "POC gain is bounded to attenuation and unity",
+    arguments: [
+      (input: -0.5, expected: 0.0),
+      (input: 0.0, expected: 0.0),
+      (input: 0.25, expected: 0.25),
+      (input: 0.5, expected: 0.5),
+      (input: 0.75, expected: 0.75),
+      (input: 1.0, expected: 1.0),
+      (input: 1.5, expected: 1.0),
+    ]
+  )
+  func gainNormalizationIsBounded(input: Double, expected: Double) {
+    #expect(AudioGainValue.normalized(input) == expected)
+  }
+
+  @Test("Non-finite POC gain fails safe to unity")
+  func nonFiniteGainReturnsUnity() {
+    #expect(AudioGainValue.normalized(.nan) == 1)
+    #expect(AudioGainValue.normalized(.infinity) == 1)
+  }
+
   @Test("Application identity uses bundle ID rather than process identifiers")
   func identityUsesBundleIdentifier() {
     let snapshot = makeSnapshot(bundleIdentifier: "com.example.player")

@@ -2,7 +2,13 @@
 
 ## Current State
 
-W002's DEBUG-only diagnostic reads Core Audio process metadata and output-I/O state. It does not create a tap, read audio samples, request microphone access, persist process history, or send data over the network. No permission prompt appeared during the metadata-only local probe. That observation is not a permission guarantee. The local app build was not confirmed to carry and exercise a signed App Sandbox entitlement, so sandbox/distribution behavior remains unproven. See [W002 findings](./work/002-audio-process-discovery.md) and [PROJECT-STATUS.md](./PROJECT-STATUS.md).
+W002's DEBUG-only diagnostic reads Core Audio process metadata and output-I/O state. It does not create a tap, read audio samples, request microphone access, persist process history, or send data over the network. No permission prompt appeared during the metadata-only local probe. W002 observed that an ad-hoc signed Debug build embedded the App Sandbox entitlement and enumerated process metadata without a prompt. This is limited local Debug evidence; it does not validate capture permission, Hardened Runtime, Developer ID signing/notarization, App Store eligibility, or production distribution. See [W002 findings](./work/002-audio-process-discovery.md).
+
+W003's DEBUG-only POC captures a process tap, applies gain in a HAL callback, and re-renders to a private aggregate containing the physical output. The Debug target has App Sandbox plus `com.apple.security.device.audio-input`; `NSAudioCaptureUsageDescription` is present in its built Info.plist. Denied permission allowed tap/IOProc setup but produced zero RMS with no observed error. After permission was restored in System Settings and Lamun was freshly launched, an active Chrome test tone produced nonzero samples and callback scaling worked. This does not establish recovery in an already-running app. Zero RMS alone cannot prove denial because digital silence or inactive stream states can produce the same observation. Samples are transient callback memory used only for gain and ephemeral RMS metrics; there is no audio-file, network, or content logging path. Release remains on the existing sandbox entitlement and does not enable this POC.
+
+Chrome Guest microphone permission is used only by the local W003 acoustic measurement page (`scripts/w003-acoustic-meter.html`) to measure speaker tone levels. It is not a Lamun feature permission. Per-application gain in the production architecture must not request microphone access. Smart Ducking's possible input requirements are a separate feasibility question and must not be inferred from this measurement harness.
+
+An ad-hoc signed Debug experiment does not prove Developer ID signed/notarized distribution. No local signing identities were available, so direct distribution remains unvalidated; Mac App Store acceptance is unknown. See [ADR-002](./decisions/ADR-002-per-app-gain-architecture.md) and [W003](./work/003-per-app-gain-feasibility.md).
 
 ## Privacy Requirements
 
@@ -24,3 +30,5 @@ The production bundle identifier, Mac App Store suitability, direct distribution
 ## Findings
 
 Record a finding's severity, affected component, threat, remediation, verification, and residual risk in a work document or this file. Update [RISK-REGISTER.md](./RISK-REGISTER.md) for ongoing risks. No product security finding has been confirmed in W001.
+
+The W002 sandbox-enabled Debug metadata observation and W003 transient capture results are recorded in their work documents. W003 does not establish production permission or distribution behavior.

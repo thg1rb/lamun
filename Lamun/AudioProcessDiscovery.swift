@@ -79,6 +79,10 @@ final class AudioProcessDiscovery: ObservableObject {
     snapshots = []
   }
 
+  func refreshNow() {
+    refresh()
+  }
+
   private func makeObserver() -> CoreAudioPropertyObserver {
     CoreAudioPropertyObserver { [weak self] in
       Task { @MainActor [weak self] in

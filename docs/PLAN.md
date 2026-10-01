@@ -6,6 +6,10 @@ This is Lamun's execution roadmap. [PROMPT.md](./PROMPT.md) is the primary produ
 
 This plan describes intended work, not completed work. Phase 0 findings may require revisions before product implementation.
 
+### Plan Revision — 1 October 2026
+
+The original Phase 0 breakdown split process capture/permission feasibility into W003 and independent gain/routing into W004. Before W003 began, those items were consolidated into one **W003 — Independent Per-Application Gain Feasibility** gate because capture, original-output suppression, gain processing, rerendering, permissions, sandboxing, latency, and multi-app isolation must be evaluated together to judge the architecture. The former W004 gain item is superseded and has no separate implementation branch. Later Phase 0 work is re-scoped below; W007 and subsequent IDs remain unchanged.
+
 ## 2. Planning Principles
 
 - **Documentation first:** Read the specification and current project documents, create the work document, define acceptance criteria and tests, then create the work branch and implement. Update the documents with findings and results before merge.
@@ -132,14 +136,14 @@ Keep one authoritative account of user-preferred volume and effective output lev
 
 ### Phase 0 — Technical Feasibility
 
-- **Goal:** Replace audio and distribution assumptions with reproducible experiments and accepted decisions.
-- **Work items:** W002–W006: process discovery; process capture and permissions; independent gain/routing; device and performance behavior; feasibility synthesis and Smart Ducking input investigation.
+- **Goal:** Replace audio and distribution assumptions with reproducible experiments and accepted decisions before production audio implementation.
+- **Work items:** W002–W006: process discovery; combined capture, permission, sandbox, independent-gain and routing gate; extended lifecycle/endurance validation; Smart Ducking input feasibility; final architecture and minimum-OS gate.
 - **Required Skills:** Verified Swift/macOS, Core Audio, architecture-review, test, security, and CI Skills where available.
-- **Documentation:** One work document per experiment; measured results in `ARCHITECTURE.md`, `SECURITY.md`, `TESTING.md`, and `RISK-REGISTER.md`; ADRs for audio control strategy, minimum macOS version, permission/sandbox/distribution constraints, and any major input-pipeline decision.
-- **Expected branches:** `feature/audio-process-discovery`, `feature/process-capture-poc`, `feature/per-app-gain-poc`, `feature/audio-lifecycle-poc`, `feature/audio-feasibility-decisions`.
-- **Tests / validation:** Reproducible two-app gain demonstration; permission and cleanup tests; device and process lifecycle matrix; latency/CPU/memory observations; local input-pipeline probe. Record test hardware and OS versions.
+- **Documentation:** One work document per item; W003 records the candidate comparison and reproducible gain measurements. Update `ARCHITECTURE.md`, `SECURITY.md`, `TESTING.md`, and `RISK-REGISTER.md` from evidence. Add ADRs for major audio architecture, minimum macOS, permission/sandbox/distribution, or input-pipeline decisions.
+- **Expected branches:** `feature/audio-process-discovery`, `feature/per-app-gain-poc`, `feature/audio-reliability-poc`, `feature/ducking-input-poc`, `feature/audio-feasibility-decisions`.
+- **Tests / validation:** Two-target independent audible gain and untargeted-app isolation; original-output suppression; permission and cleanup checks; device/process lifecycle; added-latency percentiles; CPU/memory/energy observations; local input-pipeline probe. Record hardware, OS, formats, and unavailable test conditions.
 - **Risks:** Supported APIs may not deliver independent gain, acceptable latency, isolation, or intended distribution compatibility.
-- **Exit criteria:** All Phase 0 questions have evidence or explicit blockers; a production approach and minimum OS are justified; CI and reviews pass. A failed gain gate stops Phase 1 and triggers replanning.
+- **Exit criteria:** All Phase 0 questions have evidence or explicit blockers; W003 has an evidence-backed outcome and a credible Developer ID signed/notarized direct-distribution path is assessed; a production approach and minimum OS are justified; CI and reviews pass. A failed or conditional gain gate stops Phase 1 and triggers replanning.
 
 ### Phase 1 — Per-App Mixer
 
@@ -193,10 +197,10 @@ Every row requires its work document **before implementation**. Record observati
 |---|---|---:|---|---|---|---|
 | W001 | Project bootstrap and engineering baseline | -1 | Approved plan | `feature/project-bootstrap` | `docs/work/001-project-bootstrap.md` | Native build, rules, docs, Skills record, CI, PR workflow |
 | W002 | Audio process discovery and identity POC | 0 | W001 | `feature/audio-process-discovery` | `docs/work/002-audio-process-discovery.md` | Active/recent process evidence and identity policy |
-| W003 | Process capture, permission, and sandbox POC | 0 | W002 | `feature/process-capture-poc` | `docs/work/003-process-capture-poc.md` | Isolated capture evidence and permission matrix |
-| W004 | Independent gain and routing POC | 0 | W003 | `feature/per-app-gain-poc` | `docs/work/004-per-app-gain-poc.md` | Two-app gain proof or documented blocker |
-| W005 | Audio lifecycle and performance POC | 0 | W004 | `feature/audio-lifecycle-poc` | `docs/work/005-audio-lifecycle-poc.md` | Device/process recovery and measurement baseline |
-| W006 | Feasibility decisions and ducking input probe | 0 | W003–W005 | `feature/audio-feasibility-decisions` | `docs/work/006-audio-feasibility-decisions.md` | ADRs, minimum OS, distribution implications, Phase 1 gate |
+| W003 | Independent per-application gain feasibility gate (capture, routing, permission, sandbox, performance, and distribution) | 0 | W002 | `feature/per-app-gain-poc` | `docs/work/003-per-app-gain-feasibility.md` | Evidence-backed gain architecture outcome and two-app isolation result |
+| W004 | Extended lifecycle, device, and endurance validation for the W003 candidate | 0 | W003 outcome supports continuation | `feature/audio-reliability-poc` | `docs/work/004-audio-reliability-poc.md` | Sleep/wake, reconnect, and sustained-use evidence beyond W003's bounded switch/cleanup checks |
+| W005 | Smart Ducking input feasibility probe | 0 | W003 outcome supports continuation | `feature/ducking-input-poc` | `docs/work/005-ducking-input-poc.md` | Isolated trigger-source input/activity evidence and privacy limits |
+| W006 | Phase 0 feasibility synthesis and production gate | 0 | W002–W005 | `feature/audio-feasibility-decisions` | `docs/work/006-audio-feasibility-decisions.md` | ADRs, minimum OS, distribution assessment, and Phase 1 go/replan decision |
 | W007 | Production audio control service | 1 | W006 | `feature/audio-control-service` | `docs/work/007-audio-control-service.md` | Verified gain and discovery behind stable service boundaries |
 | W008 | Menu Bar mixer | 1 | W007 | `feature/menu-bar-mixer` | `docs/work/008-menu-bar-mixer.md` | Native, accessible per-app volume and mute UI |
 | W009 | Audio activity indication | 1 | W007 | `feature/audio-activity` | `docs/work/009-audio-activity.md` | Feasible, lightweight activity signal in mixer |
@@ -213,13 +217,17 @@ Every row requires its work document **before implementation**. Record observati
 | W020 | Rules evaluation and persistence | 4 | W019 | `feature/audio-rules-core` | `docs/work/020-audio-rules-core.md` | Deterministic, tested rule behavior |
 | W021 | Rules UI and system integration | 4 | W020 | `feature/audio-rules-ui` | `docs/work/021-audio-rules-ui.md` | Configurable, explainable rule experience |
 
-W006 is a decision gate. If W004 fails the independent-gain requirement, W005–W006 should record the evidence and replan; W007 must not begin. Later work item details can change through documented ADRs as Phase 0 results become known.
+The previous W003 process-capture item and W004 independent-gain item are superseded by the combined W003 row; their concerns remain required W003 investigations. W004 and W005 may be cancelled or revised if W003 yields no viable candidate. W006 is the Phase 0 decision gate. W007 must not begin without an accepted W003 outcome, resolved critical risks, and a positive Phase 0 gate.
 
 ## 10. Dependency Graph
 
 ```mermaid
 flowchart LR
-    W001 --> W002 --> W003 --> W004 --> W005 --> W006
+    W001 --> W002 --> W003
+    W003 --> W004
+    W003 --> W005
+    W004 --> W006
+    W005 --> W006
     W006 --> W007
     W007 --> W008
     W007 --> W009
@@ -338,11 +346,12 @@ Likelihood values are preliminary and must be revised from measured evidence.
 ## 19. Milestones
 
 1. **Engineering Ready:** W001 merged into `develop`; docs, native build, CI, branch workflow, and review process work.
-2. **Audio Feasibility Proven:** W002–W006 complete; independent gain and distribution constraints are resolved by evidence and ADRs.
-3. **Per-App Mixer MVP:** W007–W012 and Phase 1 acceptance criteria pass.
-4. **Smart Ducking MVP:** W013–W016 and Phase 2 acceptance criteria pass.
-5. **First Alpha Release:** Integrate and manually validate the full initial MVP, open `develop` → `main` release PR, pass full gates and review, then tag the validated `main` commit.
-6. **Profiles and Rules:** Continue through Phase 3 and Phase 4 as post-MVP releases, using the same release path.
+2. **Independent Gain Feasibility Classified:** W003 merged with one of the documented evidence-based outcomes; production work remains gated on the result.
+3. **Audio Feasibility Proven:** W002–W006 complete; independent gain, Smart Ducking input, minimum OS, and distribution constraints are resolved by evidence and ADRs.
+4. **Per-App Mixer MVP:** W007–W012 and Phase 1 acceptance criteria pass.
+5. **Smart Ducking MVP:** W013–W016 and Phase 2 acceptance criteria pass.
+6. **First Alpha Release:** Integrate and manually validate the full initial MVP, open `develop` → `main` release PR, pass full gates and review, then tag the validated `main` commit.
+7. **Profiles and Rules:** Continue through Phase 3 and Phase 4 as post-MVP releases, using the same release path.
 
 ## 20. Definition of Ready
 
@@ -354,8 +363,8 @@ A work item is done only when intended behavior and meaningful failure handling 
 
 ## 22. Recommended Execution Order
 
-Persist this approved plan; seed the repository; complete W001 and its PR. Then execute W002 → W003 → W004 → W005 → W006, honoring the independent-gain gate. Execute W007 → W008/W009/W010/W011 → W012 and validate Phase 1. Execute W013 and W014 → W015 → W016, validate Phase 2, and prepare the first alpha release PR. After the MVP is stable, execute W017 → W018, then W019 → W020 → W021. Each branch follows the documentation, CI, review, and merge cycle in Section 11.
+W001 and W002 are complete. Execute the combined W003 independent-gain gate next and stop for its review/status handoff. Continue W004/W005 only if their experiments remain useful for the W003 outcome; complete W006 before W007. Then execute W007 → W008/W009/W010/W011 → W012 and validate Phase 1. Execute W013 and W014 → W015 → W016, validate Phase 2, and prepare the first alpha release PR. After the MVP is stable, execute W017 → W018, then W019 → W020 → W021. Each branch follows the documentation, CI, review, and merge cycle in Section 11.
 
 ## 23. Immediate Next Step
 
-**W002 — Audio Process Discovery and Identity POC**, on `feature/audio-process-discovery`, with `docs/work/002-audio-process-discovery.md` as its primary work document. W001 is complete; revise this handoff as project status advances.
+**W003 — Independent Per-Application Gain Feasibility**, on `feature/per-app-gain-poc`, with `docs/work/003-per-app-gain-feasibility.md` as its primary work document. W001 and W002 are complete. W003 must classify the architecture from evidence and must not begin production mixer development.

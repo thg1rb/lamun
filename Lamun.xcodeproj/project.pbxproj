@@ -11,6 +11,7 @@
 		B10000000000000000000001 /* AudioProcessDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000001 /* AudioProcessDiscovery.swift */; };
 		B10000000000000000000002 /* AudioProcessSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000002 /* AudioProcessSnapshot.swift */; };
 		B10000000000000000000003 /* AudioProcessDiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000003 /* AudioProcessDiscoveryView.swift */; };
+		B10000000000000000000006 /* AudioGainProofOfConcept.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000006 /* AudioGainProofOfConcept.swift */; };
 		B10000000000000000000004 /* AudioProcessSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000004 /* AudioProcessSnapshotTests.swift */; };
 		B10000000000000000000005 /* AudioProcessDiscoveryIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000005 /* AudioProcessDiscoveryIntegrationTests.swift */; };
 		778C358A1C6F7C52CB8071F5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D14572AC80FC79F30F9162F6 /* Cocoa.framework */; };
@@ -44,6 +45,7 @@
 		A10000000000000000000003 /* AudioProcessDiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProcessDiscoveryView.swift; sourceTree = "<group>"; };
 		A10000000000000000000004 /* AudioProcessSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProcessSnapshotTests.swift; sourceTree = "<group>"; };
 		A10000000000000000000005 /* AudioProcessDiscoveryIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioProcessDiscoveryIntegrationTests.swift; sourceTree = "<group>"; };
+		A10000000000000000000006 /* AudioGainProofOfConcept.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioGainProofOfConcept.swift; sourceTree = "<group>"; };
 		75531C0B37831EE4996AD100 /* LamunUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LamunUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		96E882F8E3FAB81090874BB6 /* Lamun.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lamun.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6DE0C13F89DC838F87C58A0 /* LamunLaunchTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LamunLaunchTests.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				A10000000000000000000001 /* AudioProcessDiscovery.swift */,
 				A10000000000000000000002 /* AudioProcessSnapshot.swift */,
 				A10000000000000000000003 /* AudioProcessDiscoveryView.swift */,
+				A10000000000000000000006 /* AudioGainProofOfConcept.swift */,
 				F2D4DC08D8845B842C66EA24 /* LamunApp.swift */,
 				EF6568CC0B4961579C479F1E /* Lamun.entitlements */,
 			);
@@ -270,6 +273,7 @@
 				B10000000000000000000001 /* AudioProcessDiscovery.swift in Sources */,
 				B10000000000000000000002 /* AudioProcessSnapshot.swift in Sources */,
 				B10000000000000000000003 /* AudioProcessDiscoveryView.swift in Sources */,
+				B10000000000000000000006 /* AudioGainProofOfConcept.swift in Sources */,
 				AEECCCB961165A0CEAD9BF0E /* LamunApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -461,11 +465,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Lamun/Lamun.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Lamun/Lamun-Debug.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_KEY_CFBundleDisplayName = Lamun;
 				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_FILE = Lamun/Info-Debug.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				PRODUCT_BUNDLE_IDENTIFIER = org.example.lamun.bootstrap;
@@ -523,6 +528,113 @@
 			};
 			name = Debug;
 		};
+		C00300000000000000000001 /* W003Validation */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = W003Validation;
+		};
+		C00300000000000000000002 /* W003Validation */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Lamun/Lamun-W003Validation.entitlements;
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_KEY_CFBundleDisplayName = "Lamun W003 Validation";
+				INFOPLIST_FILE = Lamun/Info-W003Validation.plist;
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.thg1rb.lamun.w003validation;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = W003_VALIDATION;
+				SWIFT_VERSION = 6.0;
+			};
+			name = W003Validation;
+		};
+		C00300000000000000000003 /* W003Validation */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.thg1rb.lamun.w003validation.tests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lamun.app/Contents/MacOS/Lamun";
+			};
+			name = W003Validation;
+		};
+		C00300000000000000000004 /* W003Validation */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.thg1rb.lamun.w003validation.uitests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+				TEST_TARGET_NAME = Lamun;
+			};
+			name = W003Validation;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -531,6 +643,7 @@
 			buildConfigurations = (
 				D273D85850E159AABDFF95D8 /* Release */,
 				70FDE7B23FABD6C6E9F9B984 /* Debug */,
+				C00300000000000000000002 /* W003Validation */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -540,6 +653,7 @@
 			buildConfigurations = (
 				19AF496F343A4C82E791A3DA /* Debug */,
 				469FF879665583697029D3B7 /* Release */,
+				C00300000000000000000001 /* W003Validation */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -549,6 +663,7 @@
 			buildConfigurations = (
 				1E090A9517D4E213EC6FD458 /* Release */,
 				D8F1F6DF1EFF05783D45E56D /* Debug */,
+				C00300000000000000000003 /* W003Validation */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -558,6 +673,7 @@
 			buildConfigurations = (
 				7FBE100A169BC31087409ADA /* Release */,
 				5183D4C17BC0B27DF71196ED /* Debug */,
+				C00300000000000000000004 /* W003Validation */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
