@@ -358,4 +358,4 @@ Persist this approved plan; seed the repository; complete W001 and its PR. Then 
 
 ## 23. Immediate Next Step
 
-**W001 — Project Bootstrap / Engineering Preparation**, on `feature/project-bootstrap`, with `docs/work/001-project-bootstrap.md` as its primary work document.
+**W002 — Audio Process Discovery and Identity POC**, on `feature/audio-process-discovery`, with `docs/work/002-audio-process-discovery.md` as its primary work document. W001 is complete; revise this handoff as project status advances.

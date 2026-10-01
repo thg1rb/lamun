@@ -2,11 +2,11 @@
 
 ## Current Phase
 
-Phase -1 — Engineering Preparation completed. Phase 0 has not started.
+Phase 0 — Technical Feasibility.
 
 ## Current Work
 
-None active. W001 — Project Bootstrap is complete; W002 is pending a separate execution cycle.
+W002 — Audio Process Discovery (`docs/work/002-audio-process-discovery.md`). Status: In Progress.
 
 ## Completed
 
@@ -16,11 +16,11 @@ None active. W001 — Project Bootstrap is complete; W002 is pending a separate 
 
 ## In Progress
 
-None recorded.
+- W002 work document created on `feature/audio-process-discovery` before source experiments.
 
 ## Next
 
-- W002 — Audio Process Discovery (Phase 0), only after a fresh session reviews `docs/PROMPT.md`, `docs/PLAN.md`, this status, and the W001 result. W002 has not started.
+- Complete W002 process discovery evidence, tests, review, and PR merge; W003 remains unstarted.
 
 ## Blocked
 
@@ -38,8 +38,8 @@ None recorded.
 
 ## Git State
 
-`main` contains the one-time specification/plan seed commit. `develop` contains the merged W001 baseline (`4e7d60f`). Both remote branches are protected. The W001 feature branch was deleted after squash merge.
+`main` contains the one-time specification/plan seed commit. `develop` contains the merged W001 baseline (`4e7d60f`). W002 branches from it as `feature/audio-process-discovery`. `main` and `develop` are protected.
 
 ## Active Work Document
 
-No active work document. The completed W001 record is `docs/work/001-project-bootstrap.md`.
+Active work document: `docs/work/002-audio-process-discovery.md`. W001 record: `docs/work/001-project-bootstrap.md`.
