@@ -8,7 +8,9 @@ import Foundation
 final class AudioProcessDiscovery: ObservableObject {
   @Published private(set) var snapshots: [AudioProcessSnapshot] = []
   @Published private(set) var errorMessage: String?
+  @Published private(set) var listenerWarnings: [String] = []
   @Published private(set) var listenerEventCount = 0
+  @Published private(set) var isProcessListListenerRegistered = false
 
   private let system = AudioHardwareSystem.shared
   private let callbackQueue = DispatchQueue(label: "org.example.lamun.process-discovery")
@@ -22,7 +24,7 @@ final class AudioProcessDiscovery: ObservableObject {
     hasStarted = true
 
     let observer = makeObserver()
-    system.delegates = [observer]
+    add(observer, to: system)
     let properties = [PropertyAddress(kAudioHardwarePropertyProcessObjectList)]
     do {
       try system.addListener(forProperties: properties, dispatchQueue: callbackQueue)
@@ -31,8 +33,9 @@ final class AudioProcessDiscovery: ObservableObject {
         observer: observer,
         properties: properties
       )
+      isProcessListListenerRegistered = true
     } catch {
-      errorMessage = "Process-list listener failed: \(error.localizedDescription)"
+      addListenerWarning("Process-list listener failed: \(error.localizedDescription)")
     }
 
     refresh()
@@ -46,7 +49,7 @@ final class AudioProcessDiscovery: ObservableObject {
       remove(systemRegistration)
       self.systemRegistration = nil
     }
-    system.delegates = []
+    isProcessListListenerRegistered = false
 
     for registration in processRegistrations.values {
       remove(registration)
@@ -153,7 +156,7 @@ final class AudioProcessDiscovery: ObservableObject {
     guard processRegistrations[process.id] == nil else { return }
 
     let observer = makeObserver()
-    process.delegates = [observer]
+    add(observer, to: process)
     let properties = [PropertyAddress(kAudioProcessPropertyIsRunningOutput)]
     do {
       try process.addListener(forProperties: properties, dispatchQueue: callbackQueue)
@@ -163,9 +166,10 @@ final class AudioProcessDiscovery: ObservableObject {
         properties: properties
       )
     } catch {
-      process.delegates = []
-      errorMessage =
+      remove(observer, from: process)
+      addListenerWarning(
         "Output-state listener failed for process object \(process.id): \(error.localizedDescription)"
+      )
     }
   }
 
@@ -209,9 +213,23 @@ final class AudioProcessDiscovery: ObservableObject {
         dispatchQueue: callbackQueue
       )
     } catch {
-      errorMessage = "Property-listener cleanup failed: \(error.localizedDescription)"
+      addListenerWarning("Property-listener cleanup failed: \(error.localizedDescription)")
     }
-    registration.object.delegates = []
+    remove(registration.observer, from: registration.object)
+  }
+
+  private func add(_ observer: CoreAudioPropertyObserver, to object: AudioHardwareObject) {
+    object.delegates.append(observer)
+  }
+
+  private func remove(_ observer: CoreAudioPropertyObserver, from object: AudioHardwareObject) {
+    let observerIdentifier = ObjectIdentifier(observer)
+    object.delegates.removeAll { ObjectIdentifier($0 as AnyObject) == observerIdentifier }
+  }
+
+  private func addListenerWarning(_ message: String) {
+    guard !listenerWarnings.contains(message) else { return }
+    listenerWarnings.append(message)
   }
 }
 

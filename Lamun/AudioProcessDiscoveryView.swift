@@ -22,6 +22,17 @@ struct AudioProcessDiscoveryView: View {
         Text("Property listener events: \(discovery.listenerEventCount)")
           .font(.caption.monospacedDigit())
 
+        Text(
+          "Process-list listener: \(discovery.isProcessListListenerRegistered ? "registered" : "unavailable")"
+        )
+        .font(.caption)
+
+        ForEach(discovery.listenerWarnings, id: \.self) { warning in
+          Text(warning)
+            .font(.caption)
+            .foregroundStyle(.red)
+        }
+
         Divider()
 
         let visible = discovery.snapshots.filter { $0.isVisible(at: timeline.date) }

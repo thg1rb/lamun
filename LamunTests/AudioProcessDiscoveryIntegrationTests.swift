@@ -1,3 +1,4 @@
+import CoreAudio
 import Foundation
 import Testing
 
@@ -14,10 +15,43 @@ struct AudioProcessDiscoveryIntegrationTests {
     discovery.start()
 
     #expect(discovery.errorMessage == nil)
+    #expect(discovery.isProcessListListenerRegistered)
     let allSnapshotsAreConnected = discovery.snapshots.allSatisfy { $0.isConnectedToHAL }
     #expect(allSnapshotsAreConnected)
 
     discovery.stop()
     #expect(discovery.snapshots.isEmpty)
+    #expect(!discovery.isProcessListListenerRegistered)
   }
+
+  @Test("Preserves delegates owned by other Core Audio clients")
+  @MainActor
+  func preservesOtherSystemDelegates() {
+    guard #available(macOS 15.0, *) else { return }
+
+    let system = AudioHardwareSystem.shared
+    let previousDelegates = system.delegates
+    let otherObserver = DiscoveryTestObserver()
+    let otherObserverIdentifier = ObjectIdentifier(otherObserver)
+    system.delegates = previousDelegates + [otherObserver]
+    defer { system.delegates = previousDelegates }
+
+    let discovery = AudioProcessDiscovery()
+    discovery.start()
+    let retainedWhileRunning = system.delegates.contains {
+      ObjectIdentifier($0 as AnyObject) == otherObserverIdentifier
+    }
+    #expect(retainedWhileRunning)
+
+    discovery.stop()
+    let retainedAfterStop = system.delegates.contains {
+      ObjectIdentifier($0 as AnyObject) == otherObserverIdentifier
+    }
+    #expect(retainedAfterStop)
+  }
+}
+
+@available(macOS 15.0, *)
+private final class DiscoveryTestObserver: PropertyListenerDelegate, @unchecked Sendable {
+  func propertiesChanged(properties: [AudioObjectPropertyAddress]) {}
 }
