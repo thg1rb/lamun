@@ -4,6 +4,8 @@
 
 W002 adds a DEBUG-only process-discovery diagnostic on macOS 15 and later. `AudioProcessDiscovery` listens to Core Audio process-list and per-process output-state properties and emits copied `AudioProcessSnapshot` values; the diagnostic view resolves optional process metadata through `NSRunningApplication`. This prototype reads no audio samples. The tested output-state property identifies active output streams, not whether a stream currently carries audible samples. Its Core Audio Swift wrapper is unavailable below macOS 15 while Lamun's provisional deployment target remains 14.2. See [ADR-001](./decisions/ADR-001-process-discovery-prototype.md) and [W002 findings](./work/002-audio-process-discovery.md).
 
+W003 is an in-progress DEBUG-only feasibility experiment for process-tap capture, original-output suppression, gain processing, and physical-output rendering. It does not establish a production topology. See [W003](./work/003-per-app-gain-feasibility.md). The former separate capture and gain work items were consolidated in the [plan revision](./PLAN.md#1-purpose).
+
 ## Provisional Direction
 
 The intended boundaries are App lifecycle; SwiftUI Menu Bar and Settings; Audio services for process discovery, control, metering, and device lifecycle; Ducking for local detection and transitions; Domain state; Persistence; and System integrations for permissions, launch at login, and logging. See [PLAN.md](./PLAN.md#7-provisional-architecture-direction).

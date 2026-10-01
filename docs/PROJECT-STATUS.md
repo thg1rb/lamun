@@ -6,7 +6,7 @@ Phase 0 — Technical Feasibility.
 
 ## Current Work
 
-W002 — Audio Process Discovery (`docs/work/002-audio-process-discovery.md`). Status: Completed and merged to `develop` in [PR #3](https://github.com/thg1rb/lamun/pull/3) (`47f35e2`, 2026-10-01).
+W003 — Independent Per-Application Gain Feasibility (`docs/work/003-per-app-gain-feasibility.md`). Status: In Progress on `feature/per-app-gain-poc`.
 
 ## Completed
 
@@ -16,14 +16,13 @@ W002 — Audio Process Discovery (`docs/work/002-audio-process-discovery.md`). S
 
 ## In Progress
 
-- W002 — Audio Process Discovery merged in [PR #3](https://github.com/thg1rb/lamun/pull/3) at `47f35e2`. Public Core Audio metadata discovery was observed with IINA, Safari, and Chrome Guest. Chrome audio appeared as a helper process; output-I/O state is not exact playback/pause state.
-- Manual diagnostic view showed listener events and handled Chrome termination/relaunch. An ad-hoc signed Debug app with the App Sandbox entitlement enumerated process metadata without a permission prompt.
-- Local build, unit/integration tests, static analysis, formatting, lint, documentation, whitespace, security-pattern, and dependency checks passed. PR CI quality passed; the review-only Sub-agent findings were resolved and its final pass found no remaining findings.
-- W001 XCTest UI runner issue remains recorded. W002 diagnostic UI was manually inspected via accessibility scripting.
+- W003 combines the former W003 process-capture/permission item and former W004 independent-gain item. The scope revision and dependencies are recorded in `docs/PLAN.md`; W003 has not yet produced an architecture conclusion.
+- W002 — Audio Process Discovery completed and merged in [PR #3](https://github.com/thg1rb/lamun/pull/3) at `47f35e2`. Public Core Audio discovery was observed with IINA, Safari, and Chrome Guest. Chrome audio appeared as a helper process; output-I/O state is not exact playback/pause state.
+- W002 observed an ad-hoc signed Debug build with the App Sandbox entitlement enumerating process metadata without a permission prompt. This does not validate audio capture or distribution behavior.
 
 ## Next
 
-- W003 — Process Capture, Permission, and Sandbox POC (`docs/work/003-process-capture-poc.md`) is the next planned work item. It has not started.
+- After W003 is completed, reviewed, validated, documented, and merged, stop for a status review. W004 is conditional extended lifecycle/endurance validation; W005 is a Smart Ducking input feasibility probe; W006 is the Phase 0 synthesis gate. None is started.
 
 ## Blocked
 
@@ -31,18 +30,19 @@ None recorded.
 
 ## Known Risks
 
-- Independent per-application gain, process capture, exact audio activity semantics, minimum macOS, production sandbox/signing, latency, and distribution remain unproven until Phase 0.
-- No production bundle identifier or distribution channel has been selected.
+- Independent per-application gain, process capture, permissions, exact audio activity semantics, minimum macOS, production sandbox/signing, latency, and distribution remain unproven until Phase 0.
+- A Developer ID signed/notarized direct-distribution path is the W003 minimum distribution feasibility gate; Mac App Store support must be assessed separately.
 - This Mac's Xcode CoreDevice/CoreSimulator mismatch still prevents the XCTest UI runner from bootstrapping. W002's Menu Bar diagnostic was manually inspected through accessibility scripting.
 
 ## Important Recent Decisions
 
 - Product architecture remains provisional until Phase 0. ADR-001 accepts only a bounded Core Audio discovery prototype direction; it is not a production topology or minimum-OS decision.
+- W003 merges the former capture and gain work items into one architecture gate because their behaviors are inseparable for independent audible gain. See the revision note in `docs/PLAN.md`.
 
 ## Git State
 
-`main` contains the one-time specification/plan seed commit. `develop` contains W001 and W002; W002 merged in PR #3 at `47f35e2`. The `feature/audio-process-discovery` branch is merged. `main` and `develop` remain protected.
+`main` contains the one-time specification/plan seed commit. `develop` contains W001 and W002; W002 merged in PR #3 at `47f35e2`, with post-merge status closeout in PR #4. W003 branches from `develop` as `feature/per-app-gain-poc`. `main` and `develop` remain protected.
 
 ## Active Work Document
 
-Active work document: `docs/work/002-audio-process-discovery.md`. W001 record: `docs/work/001-project-bootstrap.md`.
+Active work document: `docs/work/003-per-app-gain-feasibility.md`. Completed records: `docs/work/001-project-bootstrap.md` and `docs/work/002-audio-process-discovery.md`.

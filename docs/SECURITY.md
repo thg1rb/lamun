@@ -2,7 +2,9 @@
 
 ## Current State
 
-W002's DEBUG-only diagnostic reads Core Audio process metadata and output-I/O state. It does not create a tap, read audio samples, request microphone access, persist process history, or send data over the network. No permission prompt appeared during the metadata-only local probe. That observation is not a permission guarantee. The local app build was not confirmed to carry and exercise a signed App Sandbox entitlement, so sandbox/distribution behavior remains unproven. See [W002 findings](./work/002-audio-process-discovery.md) and [PROJECT-STATUS.md](./PROJECT-STATUS.md).
+W002's DEBUG-only diagnostic reads Core Audio process metadata and output-I/O state. It does not create a tap, read audio samples, request microphone access, persist process history, or send data over the network. No permission prompt appeared during the metadata-only local probe. W002 observed that an ad-hoc signed Debug build embedded the App Sandbox entitlement and enumerated process metadata without a prompt. This is limited local Debug evidence; it does not validate capture permission, Hardened Runtime, Developer ID signing/notarization, App Store eligibility, or production distribution. See [W002 findings](./work/002-audio-process-discovery.md).
+
+W003 is evaluating a DEBUG-only process-tap/gain/render proof of concept. Until results are recorded in [the W003 work document](./work/003-per-app-gain-feasibility.md), capture permissions, audio-buffer handling, and distribution support remain unverified. The POC must keep audio transient in memory and must not write, upload, transcribe, log, or analyze captured content beyond gain processing and ephemeral signal measurement.
 
 ## Privacy Requirements
 
@@ -24,3 +26,5 @@ The production bundle identifier, Mac App Store suitability, direct distribution
 ## Findings
 
 Record a finding's severity, affected component, threat, remediation, verification, and residual risk in a work document or this file. Update [RISK-REGISTER.md](./RISK-REGISTER.md) for ongoing risks. No product security finding has been confirmed in W001.
+
+The W002 sandbox-enabled Debug metadata observation and W003 capture/distribution investigation are recorded in their work documents; no capture result is yet established.
