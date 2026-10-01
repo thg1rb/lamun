@@ -1,0 +1,548 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		18C891B3F4F2D30D591A1CB4 /* LamunLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE0C13F89DC838F87C58A0 /* LamunLaunchTests.swift */; };
+		778C358A1C6F7C52CB8071F5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D14572AC80FC79F30F9162F6 /* Cocoa.framework */; };
+		AEECCCB961165A0CEAD9BF0E /* LamunApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D4DC08D8845B842C66EA24 /* LamunApp.swift */; };
+		C162321209FC0C4C9951BD33 /* BootstrapConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CACE56DE1F3C22B60FB99E /* BootstrapConfigurationTests.swift */; };
+		C208623B89A0E19A77AF53AA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D14572AC80FC79F30F9162F6 /* Cocoa.framework */; };
+		FB014AFA58B49B8CB2276041 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D14572AC80FC79F30F9162F6 /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		294AC41BD02BD87C3C49D784 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7071A3DD47B3C9AF8263691F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 37B969A3E916EAEBFDEE7B34;
+			remoteInfo = Lamun;
+		};
+		612D9B4EFA52DF5D17B48E4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7071A3DD47B3C9AF8263691F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 37B969A3E916EAEBFDEE7B34;
+			remoteInfo = Lamun;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3D7FF0EAB617F70F0096EC98 /* LamunTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LamunTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		75531C0B37831EE4996AD100 /* LamunUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LamunUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		96E882F8E3FAB81090874BB6 /* Lamun.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lamun.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6DE0C13F89DC838F87C58A0 /* LamunLaunchTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LamunLaunchTests.swift; sourceTree = "<group>"; };
+		D14572AC80FC79F30F9162F6 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		D4CACE56DE1F3C22B60FB99E /* BootstrapConfigurationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BootstrapConfigurationTests.swift; sourceTree = "<group>"; };
+		EF6568CC0B4961579C479F1E /* Lamun.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = Lamun.entitlements; sourceTree = "<group>"; };
+		F2D4DC08D8845B842C66EA24 /* LamunApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LamunApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0C5D996AC1EED7832C9D3774 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				778C358A1C6F7C52CB8071F5 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B33D625507BAFE36967AAD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB014AFA58B49B8CB2276041 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FED3451EAC30F2D2027126A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C208623B89A0E19A77AF53AA /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1F023697CAB9376529DE06C6 /* Lamun */ = {
+			isa = PBXGroup;
+			children = (
+				F2D4DC08D8845B842C66EA24 /* LamunApp.swift */,
+				EF6568CC0B4961579C479F1E /* Lamun.entitlements */,
+			);
+			name = Lamun;
+			path = Lamun;
+			sourceTree = "<group>";
+		};
+		44B8505865974C7C81246F68 /* LamunTests */ = {
+			isa = PBXGroup;
+			children = (
+				D4CACE56DE1F3C22B60FB99E /* BootstrapConfigurationTests.swift */,
+			);
+			name = LamunTests;
+			path = LamunTests;
+			sourceTree = "<group>";
+		};
+		4DA39936E9F2DA83AC1B3185 = {
+			isa = PBXGroup;
+			children = (
+				B755EA760E24563783727039 /* Products */,
+				64D2461E32287CEFB5C0CB70 /* Frameworks */,
+				1F023697CAB9376529DE06C6 /* Lamun */,
+				44B8505865974C7C81246F68 /* LamunTests */,
+				A6CB400FC6D48C82A4600997 /* LamunUITests */,
+			);
+			sourceTree = "<group>";
+		};
+		5E6044362B65B5E631742000 /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				D14572AC80FC79F30F9162F6 /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
+		64D2461E32287CEFB5C0CB70 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5E6044362B65B5E631742000 /* OS X */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A6CB400FC6D48C82A4600997 /* LamunUITests */ = {
+			isa = PBXGroup;
+			children = (
+				B6DE0C13F89DC838F87C58A0 /* LamunLaunchTests.swift */,
+			);
+			name = LamunUITests;
+			path = LamunUITests;
+			sourceTree = "<group>";
+		};
+		B755EA760E24563783727039 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				96E882F8E3FAB81090874BB6 /* Lamun.app */,
+				3D7FF0EAB617F70F0096EC98 /* LamunTests.xctest */,
+				75531C0B37831EE4996AD100 /* LamunUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		37B969A3E916EAEBFDEE7B34 /* Lamun */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3BEAB7A4526E2ED015E1E1B5 /* Build configuration list for PBXNativeTarget "Lamun" */;
+			buildPhases = (
+				14CA4C4D31C2DD7EF59106A2 /* Sources */,
+				3B33D625507BAFE36967AAD3 /* Frameworks */,
+				8A9CFF2360A1F912A63C97B5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Lamun;
+			productName = Lamun;
+			productReference = 96E882F8E3FAB81090874BB6 /* Lamun.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B3FB35EBD67F5054EB049D0E /* LamunTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 86C9B0050FF0C841E9E81597 /* Build configuration list for PBXNativeTarget "LamunTests" */;
+			buildPhases = (
+				9178F9EA33BD784BC6D595B9 /* Sources */,
+				0C5D996AC1EED7832C9D3774 /* Frameworks */,
+				BA470B9780F41A1DCB18C872 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				143CD6EA8E0708B45A297510 /* PBXTargetDependency */,
+			);
+			name = LamunTests;
+			productName = LamunTests;
+			productReference = 3D7FF0EAB617F70F0096EC98 /* LamunTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		BE0A00CDD3B4213A5D452039 /* LamunUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B1119D622B5A5A3D1E223772 /* Build configuration list for PBXNativeTarget "LamunUITests" */;
+			buildPhases = (
+				E173B8799C31D1A70FD0CA48 /* Sources */,
+				FED3451EAC30F2D2027126A5 /* Frameworks */,
+				2F0B72DDFE46EA5B4BB0CBF6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D60DDBEEDAB33BB9FA57D6D5 /* PBXTargetDependency */,
+			);
+			name = LamunUITests;
+			productName = LamunUITests;
+			productReference = 75531C0B37831EE4996AD100 /* LamunUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7071A3DD47B3C9AF8263691F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 2700;
+			};
+			buildConfigurationList = 4A6F76781EE3F891B7F26348 /* Build configuration list for PBXProject "Lamun" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4DA39936E9F2DA83AC1B3185;
+			minimizedProjectReferenceProxies = 0;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = B755EA760E24563783727039 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				37B969A3E916EAEBFDEE7B34 /* Lamun */,
+				B3FB35EBD67F5054EB049D0E /* LamunTests */,
+				BE0A00CDD3B4213A5D452039 /* LamunUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2F0B72DDFE46EA5B4BB0CBF6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8A9CFF2360A1F912A63C97B5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BA470B9780F41A1DCB18C872 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		14CA4C4D31C2DD7EF59106A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AEECCCB961165A0CEAD9BF0E /* LamunApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9178F9EA33BD784BC6D595B9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C162321209FC0C4C9951BD33 /* BootstrapConfigurationTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E173B8799C31D1A70FD0CA48 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18C891B3F4F2D30D591A1CB4 /* LamunLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		143CD6EA8E0708B45A297510 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Lamun;
+			target = 37B969A3E916EAEBFDEE7B34 /* Lamun */;
+			targetProxy = 294AC41BD02BD87C3C49D784 /* PBXContainerItemProxy */;
+		};
+		D60DDBEEDAB33BB9FA57D6D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Lamun;
+			target = 37B969A3E916EAEBFDEE7B34 /* Lamun */;
+			targetProxy = 612D9B4EFA52DF5D17B48E4C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		19AF496F343A4C82E791A3DA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		1E090A9517D4E213EC6FD458 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				PRODUCT_BUNDLE_IDENTIFIER = org.example.lamun.bootstrap.tests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lamun.app/Contents/MacOS/Lamun";
+			};
+			name = Release;
+		};
+		469FF879665583697029D3B7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		5183D4C17BC0B27DF71196ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				PRODUCT_BUNDLE_IDENTIFIER = org.example.lamun.bootstrap.uitests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+				TEST_TARGET_NAME = Lamun;
+			};
+			name = Debug;
+		};
+		70FDE7B23FABD6C6E9F9B984 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Lamun/Lamun.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Lamun;
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				PRODUCT_BUNDLE_IDENTIFIER = org.example.lamun.bootstrap;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		7FBE100A169BC31087409ADA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				PRODUCT_BUNDLE_IDENTIFIER = org.example.lamun.bootstrap.uitests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+				TEST_TARGET_NAME = Lamun;
+			};
+			name = Release;
+		};
+		D273D85850E159AABDFF95D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Lamun/Lamun.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Lamun;
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				PRODUCT_BUNDLE_IDENTIFIER = org.example.lamun.bootstrap;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		D8F1F6DF1EFF05783D45E56D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				PRODUCT_BUNDLE_IDENTIFIER = org.example.lamun.bootstrap.tests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Lamun.app/Contents/MacOS/Lamun";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3BEAB7A4526E2ED015E1E1B5 /* Build configuration list for PBXNativeTarget "Lamun" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D273D85850E159AABDFF95D8 /* Release */,
+				70FDE7B23FABD6C6E9F9B984 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4A6F76781EE3F891B7F26348 /* Build configuration list for PBXProject "Lamun" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				19AF496F343A4C82E791A3DA /* Debug */,
+				469FF879665583697029D3B7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		86C9B0050FF0C841E9E81597 /* Build configuration list for PBXNativeTarget "LamunTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E090A9517D4E213EC6FD458 /* Release */,
+				D8F1F6DF1EFF05783D45E56D /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B1119D622B5A5A3D1E223772 /* Build configuration list for PBXNativeTarget "LamunUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7FBE100A169BC31087409ADA /* Release */,
+				5183D4C17BC0B27DF71196ED /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7071A3DD47B3C9AF8263691F /* Project object */;
+}
