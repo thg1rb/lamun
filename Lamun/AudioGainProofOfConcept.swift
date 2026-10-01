@@ -31,8 +31,9 @@
       }
       do {
         let behavior = CATapMuteBehavior(rawValue: selectedMuteBehaviorRawValue) ?? .mutedWhenTapped
-        let session = try AudioGainTapSession.start(process: process, muteBehavior: behavior)
+        let session = AudioGainTapSession(process: process, muteBehavior: behavior)
         sessionResources[process.audioObjectID] = session
+        try session.start()
         activeSessions[process.audioObjectID] = AudioGainSessionInfo(
           streamFormatDescription: session.streamFormatDescription,
           outputDeviceName: session.outputDeviceName,
@@ -40,7 +41,25 @@
         )
         lastError = nil
       } catch {
-        lastError = error.localizedDescription
+        let startupError = error.localizedDescription
+        if let session = sessionResources[process.audioObjectID] {
+          do {
+            try session.stop()
+            sessionResources.removeValue(forKey: process.audioObjectID)
+            activeSessions.removeValue(forKey: process.audioObjectID)
+            lastError = startupError
+          } catch {
+            activeSessions[process.audioObjectID] = AudioGainSessionInfo(
+              streamFormatDescription: session.streamFormatDescription,
+              outputDeviceName: session.outputDeviceName,
+              muteBehaviorName: session.muteBehaviorName
+            )
+            lastError =
+              "\(startupError) Setup cleanup failed and can be retried: \(error.localizedDescription)"
+          }
+        } else {
+          lastError = startupError
+        }
       }
     }
 
@@ -89,9 +108,9 @@
   @MainActor
   private final class AudioGainTapSession {
     let streamFormatDescription: String
-    let outputDeviceName: String
-    let muteBehaviorName: String
     let metrics: AudioGainMetricCollector
+    private let process: AudioProcessSnapshot
+    private let muteBehavior: CATapMuteBehavior
     private var tapID: AudioObjectID?
     private var aggregateDeviceID: AudioObjectID?
     private var ioProcID: AudioDeviceIOProcID?
@@ -99,116 +118,88 @@
     private var ioProcIsRunning = false
     private(set) var gain = 1.0
 
-    private init(
-      tapID: AudioObjectID,
-      aggregateDeviceID: AudioObjectID,
-      ioProcID: AudioDeviceIOProcID,
-      gainControl: AudioGainControl,
-      metrics: AudioGainMetricCollector,
-      outputDeviceName: String,
-      muteBehaviorName: String
-    ) {
-      self.tapID = tapID
-      self.aggregateDeviceID = aggregateDeviceID
-      self.ioProcID = ioProcID
-      self.ioProcIsRunning = true
-      self.gainControl = gainControl
-      self.metrics = metrics
-      self.outputDeviceName = outputDeviceName
-      self.muteBehaviorName = muteBehaviorName
-      self.streamFormatDescription = "HAL aggregate callback; Float32 buffers required by this POC"
+    private(set) var outputDeviceName = "Unavailable"
+    private(set) var muteBehaviorName = "Unavailable"
+
+    init(process: AudioProcessSnapshot, muteBehavior: CATapMuteBehavior) {
+      self.process = process
+      self.muteBehavior = muteBehavior
+      self.gainControl = AudioGainControl()
+      self.metrics = AudioGainMetricCollector()
+      self.streamFormatDescription =
+        "HAL aggregate callback; Float32 linear PCM required by this POC"
     }
 
-    static func start(
-      process: AudioProcessSnapshot,
-      muteBehavior: CATapMuteBehavior
-    ) throws -> AudioGainTapSession {
+    func start() throws {
       let description = CATapDescription(stereoMixdownOfProcesses: [process.audioObjectID])
       description.name = "Lamun W003 gain POC · \(process.displayName)"
       description.isPrivate = true
       description.muteBehavior = muteBehavior
 
-      var tapID = AudioObjectID(kAudioObjectUnknown)
-      let tapStatus = AudioHardwareCreateProcessTap(description, &tapID)
+      var createdTapID = AudioObjectID(kAudioObjectUnknown)
+      let tapStatus = AudioHardwareCreateProcessTap(description, &createdTapID)
       guard tapStatus == noErr else {
         throw AudioGainProofOfConceptError.coreAudio("Create process tap", status: tapStatus)
       }
+      tapID = createdTapID
 
-      var aggregateID: AudioObjectID = 0
-      var ioProcID: AudioDeviceIOProcID?
-      do {
-        let output = try defaultOutputDevice()
-        let tapUID = try tapUID(for: tapID)
-        let aggregateDescription: [String: Any] = [
-          kAudioAggregateDeviceNameKey: "Lamun W003 · \(process.displayName)",
-          kAudioAggregateDeviceUIDKey: "org.example.lamun.w003.\(UUID().uuidString)",
-          kAudioAggregateDeviceIsPrivateKey: 1,
-          kAudioAggregateDeviceIsStackedKey: 0,
-          kAudioAggregateDeviceSubDeviceListKey: [[kAudioSubDeviceUIDKey: output.uid]],
-          kAudioAggregateDeviceMainSubDeviceKey: output.uid,
-          kAudioAggregateDeviceTapListKey: [[kAudioSubTapUIDKey: tapUID]],
-          kAudioAggregateDeviceTapAutoStartKey: 1,
-        ]
-        let aggregateStatus = AudioHardwareCreateAggregateDevice(
-          aggregateDescription as CFDictionary,
-          &aggregateID
-        )
-        guard aggregateStatus == noErr else {
-          throw AudioGainProofOfConceptError.coreAudio(
-            "Create tap/output aggregate device", status: aggregateStatus)
-        }
-
-        let tapFormat = try audioStreamFormat(
-          objectID: tapID,
-          selector: kAudioTapPropertyFormat,
-          scope: kAudioObjectPropertyScopeGlobal,
-          label: "Read process tap stream format"
-        )
-        try requireFloat32(tapFormat, label: "Process tap")
-
-        let outputFormat = try audioStreamFormat(
-          objectID: aggregateID,
-          selector: kAudioDevicePropertyStreamFormat,
-          scope: kAudioDevicePropertyScopeOutput,
-          label: "Read aggregate output stream format"
-        )
-        try requireFloat32(outputFormat, label: "Aggregate output")
-
-        let metrics = AudioGainMetricCollector()
-        let gainControl = AudioGainControl()
-        let ioBlock = makeAudioGainIOBlock(metrics: metrics, gainControl: gainControl)
-        let procStatus = AudioDeviceCreateIOProcIDWithBlock(&ioProcID, aggregateID, nil, ioBlock)
-        guard procStatus == noErr, let ioProcID else {
-          throw AudioGainProofOfConceptError.coreAudio(
-            "Create aggregate I/O callback", status: procStatus)
-        }
-        let startStatus = AudioDeviceStart(aggregateID, ioProcID)
-        guard startStatus == noErr else {
-          throw AudioGainProofOfConceptError.coreAudio(
-            "Start aggregate I/O callback", status: startStatus)
-        }
-        return AudioGainTapSession(
-          tapID: tapID,
-          aggregateDeviceID: aggregateID,
-          ioProcID: ioProcID,
-          gainControl: gainControl,
-          metrics: metrics,
-          outputDeviceName: output.name,
-          muteBehaviorName: name(for: muteBehavior)
-        )
-      } catch {
-        if let ioProcID {
-          AudioDeviceStop(aggregateID, ioProcID)
-          AudioDeviceDestroyIOProcID(aggregateID, ioProcID)
-        }
-        if aggregateID != 0 {
-          let status = AudioHardwareDestroyAggregateDevice(aggregateID)
-          if status != noErr { NSLog("W003 POC aggregate cleanup failed: 0x%08x", status) }
-        }
-        let destroyStatus = AudioHardwareDestroyProcessTap(tapID)
-        if destroyStatus != noErr { NSLog("W003 POC tap cleanup failed: 0x%08x", destroyStatus) }
-        throw error
+      let output = try Self.defaultOutputDevice()
+      let tapUID = try Self.tapUID(for: createdTapID)
+      let aggregateDescription: [String: Any] = [
+        kAudioAggregateDeviceNameKey: "Lamun W003 · \(process.displayName)",
+        kAudioAggregateDeviceUIDKey: "org.example.lamun.w003.\(UUID().uuidString)",
+        kAudioAggregateDeviceIsPrivateKey: 1,
+        kAudioAggregateDeviceIsStackedKey: 0,
+        kAudioAggregateDeviceSubDeviceListKey: [[kAudioSubDeviceUIDKey: output.uid]],
+        kAudioAggregateDeviceMainSubDeviceKey: output.uid,
+        kAudioAggregateDeviceTapListKey: [[kAudioSubTapUIDKey: tapUID]],
+        kAudioAggregateDeviceTapAutoStartKey: 1,
+      ]
+      var createdAggregateID = AudioObjectID(kAudioObjectUnknown)
+      let aggregateStatus = AudioHardwareCreateAggregateDevice(
+        aggregateDescription as CFDictionary,
+        &createdAggregateID
+      )
+      guard aggregateStatus == noErr else {
+        throw AudioGainProofOfConceptError.coreAudio(
+          "Create tap/output aggregate device", status: aggregateStatus)
       }
+      aggregateDeviceID = createdAggregateID
+      outputDeviceName = output.name
+      muteBehaviorName = Self.name(for: muteBehavior)
+
+      let tapFormat = try Self.audioStreamFormat(
+        objectID: createdTapID,
+        selector: kAudioTapPropertyFormat,
+        scope: kAudioObjectPropertyScopeGlobal,
+        label: "Read process tap stream format"
+      )
+      try Self.requireFloat32(tapFormat, label: "Process tap")
+
+      let outputFormat = try Self.audioStreamFormat(
+        objectID: createdAggregateID,
+        selector: kAudioDevicePropertyStreamFormat,
+        scope: kAudioDevicePropertyScopeOutput,
+        label: "Read aggregate output stream format"
+      )
+      try Self.requireFloat32(outputFormat, label: "Aggregate output")
+
+      let ioBlock = makeAudioGainIOBlock(metrics: metrics, gainControl: gainControl)
+      var createdIOProcID: AudioDeviceIOProcID?
+      let procStatus = AudioDeviceCreateIOProcIDWithBlock(
+        &createdIOProcID, createdAggregateID, nil, ioBlock)
+      ioProcID = createdIOProcID
+      guard procStatus == noErr, let createdIOProcID else {
+        throw AudioGainProofOfConceptError.coreAudio(
+          "Create aggregate I/O callback", status: procStatus)
+      }
+      ioProcID = createdIOProcID
+      let startStatus = AudioDeviceStart(createdAggregateID, createdIOProcID)
+      guard startStatus == noErr else {
+        throw AudioGainProofOfConceptError.coreAudio(
+          "Start aggregate I/O callback", status: startStatus)
+      }
+      ioProcIsRunning = true
     }
 
     func setGain(_ value: Double) {
@@ -307,9 +298,11 @@
       let isFloat32 =
         format.mBitsPerChannel == 32
         && format.mFormatFlags & kAudioFormatFlagIsFloat != 0
+        && format.mFormatFlags & kAudioFormatFlagIsPacked != 0
+        && format.mFormatFlags & kAudioFormatFlagIsBigEndian == 0
       guard isLinearPCM && isFloat32 else {
         throw AudioGainProofOfConceptError.unsupportedFormat(
-          "\(label) must be linear PCM Float32; received formatID \(format.mFormatID), flags 0x\(String(format.mFormatFlags, radix: 16)), bits/channel \(format.mBitsPerChannel)."
+          "\(label) must be packed little-endian linear PCM Float32; received formatID \(format.mFormatID), flags 0x\(String(format.mFormatFlags, radix: 16)), bits/channel \(format.mBitsPerChannel)."
         )
       }
     }

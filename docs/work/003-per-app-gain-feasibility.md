@@ -202,7 +202,7 @@ The hard feasibility gate is a credible Developer ID signed and notarized direct
 - **Confirmed:** Project-local Skill visibility was rechecked using `npx skills list --json`. `swift-testing-expert` guidance was read; no suitable dedicated Core Audio Skill was discovered, so Apple documentation and SDK declarations remain the technical authority.
 - **Confirmed:** Debug build metadata contains `NSAudioCaptureUsageDescription`; the Debug app has sandbox and audio-input entitlements. Release remains on the bootstrap sandbox entitlement and does not enable capture.
 - **Observed:** Initial Debug generated Info.plist omitted the requested usage string. The Debug target now uses `Lamun/Info-Debug.plist` to include it explicitly.
-- **Confirmed:** Following review, the POC now reads the tap input and aggregate output `AudioStreamBasicDescription` before starting the callback and rejects formats other than linear PCM Float32. A cleanup failure retains session ownership and resource handles so a later stop can retry; failure injection remains untested.
+- **Confirmed:** Following review, the POC now reads the tap input and aggregate output `AudioStreamBasicDescription` before starting the callback and rejects formats other than packed little-endian linear PCM Float32. It records resource handles as setup proceeds; startup rollback and normal teardown retain ownership when destruction fails so a later stop can retry. Failure injection remains untested.
 - **Confirmed:** The review found and the main agent corrected a stale status sentence that said no architecture outcome existed. Review did not validate acoustic output; that gate remains open.
 
 ## Findings
