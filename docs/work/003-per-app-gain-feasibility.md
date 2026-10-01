@@ -187,14 +187,14 @@ The hard feasibility gate is a credible Developer ID signed and notarized direct
 - **Observed:** The system-audio recording permission prompt appeared for the Debug process-tap experiment and was granted. Permission denial, revocation, and recovery through System Settings were not tested.
 - **Not Tested:** No acoustic listening test or analog/loopback recording was performed. Therefore clicks, pops, dropouts, echo, duplicates, pitch/timing drift, channel imbalance, resampling artifacts, or audible leakage are not characterized. RMS measurements prove sample scaling within the callback, not listener-perceived output quality.
 - **Not Tested:** Five-minute idle/one/two-target resource sampling and energy observations. The available CPU/RSS values are point samples only.
-- **Not Tested:** Non-Float32 formats, non-stereo/channel layouts, Bluetooth/external device switching, output-device disappearance, explicit permission denial, abnormal process exit, render failure injection, full app restart recovery, and full acoustic end-to-end latency.
+- **Not Tested:** Non-Float32 formats (the POC now rejects reported formats except packed little-endian linear PCM Float32 before starting), non-stereo/channel layouts, Bluetooth/external device switching, output-device disappearance, explicit permission denial, abnormal process exit, render failure injection, full app restart recovery, and full acoustic end-to-end latency.
 
 ### X-003 — Lifecycle, shutdown, and environment limits
 
 - **Observed:** Chrome target termination while tapped caused reconciliation to stop/remove the session; Chrome relaunch appeared with a new PID and AudioObjectID and unity default gain. The exact pause/resume transition was not separately measured.
 - **Observed:** Normal Lamun quit used the explicit stop-all path and the process exited; Chrome and Safari remained listed as audio clients. The HAL tap/aggregate/IOProc destroy calls are in the stop path. Core Audio object inventory before/after and abnormal-exit recovery were not captured.
 - **Not Tested:** Physical output change while active (no second physical device), five-minute load comparisons, acoustic loopback/listening, permission denial/recovery, and Developer ID notarization (no identity/certificate available).
-- **Not Tested:** Candidate C in formats besides observed Float32 stereo, or with Bluetooth/external hardware. The callback currently assumes Float32 sample buffers and writes zeros for channel/format mismatch; this is not sufficient format support for production.
+- **Not Tested:** Candidate C in formats besides observed Float32 stereo, or with Bluetooth/external hardware. Startup rejects reported sample formats other than packed little-endian linear PCM Float32. The callback still zero-fills buffers when input/output buffer or channel shapes mismatch; this guard has not been exercised with alternate channel layouts or runtime format changes, and is not sufficient format support for production.
 
 ### X-004 — Local quality and deterministic tests
 
