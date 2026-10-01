@@ -6,7 +6,7 @@ Phase 0 — Technical Feasibility.
 
 ## Current Work
 
-W002 — Audio Process Discovery (`docs/work/002-audio-process-discovery.md`). Status: In Progress.
+W002 — Audio Process Discovery (`docs/work/002-audio-process-discovery.md`). Status: Completed and merged to `develop` in [PR #3](https://github.com/thg1rb/lamun/pull/3) (`47f35e2`, 2026-10-01).
 
 ## Completed
 
@@ -16,14 +16,14 @@ W002 — Audio Process Discovery (`docs/work/002-audio-process-discovery.md`). S
 
 ## In Progress
 
-- W002 documentation-first work record and DEBUG-only process-discovery prototype are implemented on `feature/audio-process-discovery`.
-- Public Core Audio metadata discovery was observed with IINA, Safari, and Chrome Guest. Chrome audio appeared as a helper process; output-I/O state is not exact playback/pause state.
+- W002 — Audio Process Discovery merged in [PR #3](https://github.com/thg1rb/lamun/pull/3) at `47f35e2`. Public Core Audio metadata discovery was observed with IINA, Safari, and Chrome Guest. Chrome audio appeared as a helper process; output-I/O state is not exact playback/pause state.
 - Manual diagnostic view showed listener events and handled Chrome termination/relaunch. An ad-hoc signed Debug app with the App Sandbox entitlement enumerated process metadata without a permission prompt.
-- The Debug build, unit/integration tests, static analysis, formatting, lint, documentation, whitespace, security-pattern, and dependency checks pass. Review findings were fixed and regression-tested, including injected listener-registration failure. The final review-only Sub-agent pass found no remaining findings; CI for the latest commit and PR merge are pending. The local XCTest UI runner issue remains recorded; W002 diagnostic UI was manually inspected via accessibility scripting.
+- Local build, unit/integration tests, static analysis, formatting, lint, documentation, whitespace, security-pattern, and dependency checks passed. PR CI quality passed; the review-only Sub-agent findings were resolved and its final pass found no remaining findings.
+- W001 XCTest UI runner issue remains recorded. W002 diagnostic UI was manually inspected via accessibility scripting.
 
 ## Next
 
-- Complete W002 process discovery evidence, tests, review, and PR merge; W003 remains unstarted.
+- W003 — Process Capture, Permission, and Sandbox POC (`docs/work/003-process-capture-poc.md`) is the next planned work item. It has not started.
 
 ## Blocked
 
@@ -41,7 +41,7 @@ None recorded.
 
 ## Git State
 
-`main` contains the one-time specification/plan seed commit. `develop` contains the merged W001 baseline (`4e7d60f`). W002 branches from it as `feature/audio-process-discovery`. `main` and `develop` are protected.
+`main` contains the one-time specification/plan seed commit. `develop` contains W001 and W002; W002 merged in PR #3 at `47f35e2`. The `feature/audio-process-discovery` branch is merged. `main` and `develop` remain protected.
 
 ## Active Work Document
 

@@ -2,7 +2,7 @@
 
 ## Status
 
-In Progress — Phase 0 Technical Feasibility.
+Completed — Phase 0 Technical Feasibility; merged to `develop` in [PR #3](https://github.com/thg1rb/lamun/pull/3) at `47f35e2` on 2026-10-01.
 
 ## Context
 
@@ -170,7 +170,7 @@ Planning was completed before source implementation. The current branch is `feat
 
 ## Result
 
-Prototype and experiments are implemented. Local Debug build, unit and integration tests, static analysis, formatting, lint, documentation links, whitespace, security-pattern, and dependency checks pass after resolving the review findings: listener setup failures remain visible after enumeration, and both success and injected-failure cleanup remove only Lamun-owned delegates. Regression tests cover these behaviors. A sandbox-enabled ad-hoc signed Debug build also ran and enumerated process metadata. The five-minute active discovery sample and idle sample completed. The review-only Sub-agent completed its final pass with no remaining findings. CI for the latest code commit and PR merge remain pending. The separate XCTest UI target still exits before bootstrapping with signal kill under the local CoreDevice/CoreSimulator mismatch; the DEBUG Menu Bar diagnostic itself was manually inspected through accessibility scripting. No production discovery/filtering architecture is accepted yet.
+W002 is complete and merged to `develop` in [PR #3](https://github.com/thg1rb/lamun/pull/3) at `47f35e2`. Local Debug build, unit and integration tests, static analysis, formatting, lint, documentation links, whitespace, security-pattern, and dependency checks passed. PR CI quality passed. Review findings on persistent listener failures and shared delegate cleanup were fixed and regression-tested; the final review-only Sub-agent pass found no remaining findings. A sandbox-enabled ad-hoc signed Debug build enumerated process metadata. Five-minute idle and active discovery samples completed. The separate XCTest UI target still exits before bootstrapping with signal kill under the local CoreDevice/CoreSimulator mismatch; the DEBUG Menu Bar diagnostic itself was manually inspected through accessibility scripting. No production discovery/filtering architecture is accepted.
 
 ## Deviations From Plan
 
@@ -178,4 +178,4 @@ The originally proposed acceptance that pause must immediately clear active stat
 
 ## Follow-up Work
 
-After W002 is merged, W003 — Process Capture, Permission, and Sandbox POC — is next per `docs/PLAN.md`. Do not begin it in this work cycle. These discovery results do not prove capture or per-app gain feasibility.
+Next planned work item: W003 — Process Capture, Permission, and Sandbox POC (`docs/work/003-process-capture-poc.md`), per `docs/PLAN.md`. W003 has not started. These discovery results do not prove capture or per-app gain feasibility.
