@@ -28,11 +28,14 @@ Check formatting, lint, docs, security, and dependencies:
 bash scripts/check-format.sh
 bash scripts/check-lint.sh
 python3 scripts/check-docs.py
+python3 scripts/check-whitespace.py
 python3 scripts/check-security.py
 python3 scripts/check-dependencies.py
 ```
 
 To format intentionally, run `xcrun swift-format format --in-place --recursive Lamun LamunTests LamunUITests`, review the diff, then rerun checks. CI verifies; it does not rewrite source.
+
+The whitespace check covers first-party tracked text. Copied Skills under `.agents/skills/` keep their upstream bytes so `skills-lock.json` remains verifiable; their existing trailing spaces are excluded. The upstream license notices are retained in `docs/licenses/`.
 
 ## Git and PR Workflow
 

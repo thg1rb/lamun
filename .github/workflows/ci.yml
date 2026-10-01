@@ -26,6 +26,8 @@ jobs:
           swift --version
       - name: Documentation
         run: python3 scripts/check-docs.py
+      - name: First-party whitespace
+        run: python3 scripts/check-whitespace.py
       - name: Formatting
         run: bash scripts/check-format.sh
       - name: Lint

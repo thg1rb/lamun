@@ -103,7 +103,7 @@ Planning sections were completed before substantial bootstrap implementation.
 
 ## Result
 
-Local baseline is built and checked. PR, remote CI, review, branch protection, and merge remain pending.
+Local baseline is built and checked. [PR #1](https://github.com/thg1rb/lamun/pull/1) is open to `develop`; its first GitHub Actions quality run passed. Review-only Sub-agent findings are being resolved before a final CI run and merge.
 
 Local validation on macOS 27.0 / Xcode 27.0:
 
@@ -112,6 +112,7 @@ Local validation on macOS 27.0 / Xcode 27.0:
 - `xcodebuild analyze`: passed.
 - Format, lint, documentation links, security baseline, dependency baseline: passed.
 - `actionlint` v1.7.12: passed for `.github/workflows/ci.yml`.
+- Initial PR CI quality run `36835523478`: passed (documentation, format, lint, security, dependencies, build, unit tests, static analysis). Final post-review CI remains pending.
 - UI target compiled; UI test runner exited before establishing a connection. This local Xcode also reports a CoreDevice/CoreSimulator version mismatch. Root cause is unproven; the UI smoke result remains open and is not reported as passed.
 - Built app launched as a process from Finder/open; Menu Bar accessibility inspection timed out, so visual presence remains unverified.
 
@@ -119,8 +120,10 @@ Local validation on macOS 27.0 / Xcode 27.0:
 
 The optional local UI smoke test did not complete on this machine. Required CI runs the unit target; a functioning interactive macOS/Xcode environment must validate the Menu Bar UI before relying on UI automation.
 
+The review-only Sub-agent found copied Skills lacked retained upstream license notices, and upstream reference files contain trailing whitespace. The notices are now in `docs/licenses/`. A first-party whitespace gate was added; vendored Skill bytes remain intact so lockfile hashes are unchanged.
+
 ## Follow-up Work
 
-- Finish W001 PR, CI, review-only Sub-agent review, branch protection verification, and merge.
+- Rerun local checks and PR CI after review fixes, verify branch protection, and merge W001.
 - Resolve the local Xcode CoreDevice/CoreSimulator mismatch or run UI smoke validation on a healthy Mac. Do not mistake this environment failure for a passing UI test.
 - W002 — Audio Process Discovery, after W001 meets its exit criteria. Do not begin it in this work cycle.

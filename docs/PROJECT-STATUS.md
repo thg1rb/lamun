@@ -15,11 +15,11 @@ W001 — Project Bootstrap (`docs/work/001-project-bootstrap.md`). Status: In Pr
 
 ## In Progress
 
-- Engineering documentation, native project, quality tooling, and Skills evaluation are implemented locally. The W001 PR, remote CI, review, and merge remain.
+- Engineering documentation, native project, quality tooling, and Skills evaluation are implemented on `feature/project-bootstrap`. [PR #1](https://github.com/thg1rb/lamun/pull/1) is open to `develop`. Its first CI run passed; review-only Sub-agent findings are being resolved, then CI will rerun before merge.
 
 ## Next
 
-- Finish W001 validation, PR, CI, review-only Sub-agent review, and merge to `develop`.
+- Finish review findings, rerun local and PR CI checks, and merge W001 to `develop`.
 
 ## Blocked
 

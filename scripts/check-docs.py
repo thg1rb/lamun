@@ -21,6 +21,10 @@ REQUIRED = [
     "docs/RISK-REGISTER.md",
     "docs/work/001-project-bootstrap.md",
     "docs/decisions/README.md",
+    "docs/licenses/README.md",
+    "docs/licenses/swiftui-expert-skill-LICENSE",
+    "docs/licenses/swift-testing-expert-LICENSE",
+    "docs/licenses/github-actions-hardening-LICENSE",
 ]
 LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 errors = []

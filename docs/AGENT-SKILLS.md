@@ -12,4 +12,6 @@ W001 inspected built-in `find-skills`, `skill-installer`, and `skill-creator` ca
 
 No Core Audio-specific Skill passed the relevance/quality screen in W001. Do not treat generic search results as proof of expertise; Phase 0 must use Apple documentation and experiments. Revisit discovery when a concrete gap appears. Avoid redundant project Skills.
 
+The copied Skills' upstream MIT licenses and copyright notices are retained in [`docs/licenses/`](./licenses/README.md). Copied Skill content is kept byte-for-byte as installed so the lockfile hashes remain valid; first-party whitespace checks exclude that vendor tree.
+
 To inspect project Skills, run `npx skills list --json` and read the relevant `.agents/skills/<name>/SKILL.md`. Skills are copied into the repository so a fresh session can inspect them; do not execute bundled scripts without understanding them. Use `npx skills experimental_install` only after reviewing the lock and install scope. Verify updates before committing them.
